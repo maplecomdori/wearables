@@ -1,0 +1,42 @@
+<!--
+        An item representing a course with its information in the list of courses page
+-->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/courseBox"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/course_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Title"
+        android:gravity="center_horizontal"
+        android:textAllCaps="true"
+        android:textSize="25dp" />
+
+
+    <ImageView
+        android:id="@+id/course_img"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/course_title"
+        android:padding="1dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/course_two" />
+
+    <TextView
+        android:id="@+id/course_description"
+        android:layout_toRightOf="@id/course_img"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/course_title"
+        android:text="Description"
+        android:textSize="20dp" />
+
+
+</RelativeLayout>

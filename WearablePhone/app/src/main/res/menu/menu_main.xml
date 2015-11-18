@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:WearablePhone ="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/searchBluetooth"
+        android:icon="@drawable/bluetooth"
+        android:title="Search Devices"
+        WearablePhone:showAsAction="ifRoom"
+
+        />
+    <item
+        android:id="@+id/searchMyo"
+        android:icon="@drawable/myo"
+        android:title="Search Myo"
+        WearablePhone:showAsAction="ifRoom"
+
+        />
+
+
+</menu>
