@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.drdc_admin.moverioapp">
+    // Required for communicating with the Myo device
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    // Required for sending usage data to Thalmic Labs
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.DeviceListActivity"
+            android:label="@string/title_activity_device_list"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.Holo.Dialog">
+
+        </activity>
+
+        <activity
+            android:name=".activities.CourseListActivity"
+            android:label="@string/title_activity_course_list"
+            android:screenOrientation="landscape">
+
+        </activity>
+        <activity
+            android:name=".activities.LessonListActivity"
+            android:label="@string/title_activity_lesson_list"
+            android:screenOrientation="landscape"
+
+            >
+
+        </activity>
+        <activity
+            android:name=".activities.StudyLessonActivity"
+            android:label="@string/title_activity_study_lesson"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+    </application>
+
+</manifest>

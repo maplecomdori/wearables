@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Message from the Phone"
+        android:textSize="20dp"
+        />
+
+
+    <TextView
+        android:id="@+id/myoMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:text="MSG CONTENT"
+        android:textSize="40dp"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go to Courses (temporary)"
+        android:id="@+id/bt_tmp"
+        android:layout_weight="1"
+        android:onClick="navigateToCourseListActivity"/>
+
+
+</LinearLayout>
+
+

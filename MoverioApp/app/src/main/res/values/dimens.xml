@@ -1,0 +1,13 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines.
+    https://developer.android.com/reference/android/support/v7/appcompat/R.dimen.html
+    -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="activity_tv_title">30dp</dimen>
+    <dimen name="listItem_title">25dp</dimen>
+    <dimen name="listItem_description">10dp</dimen>
+    <dimen name="listItem_topMargin">8dp</dimen>
+    <dimen name="listItem_border_width">3dp</dimen>
+</resources>

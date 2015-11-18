@@ -1,0 +1,57 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/searchLessonMenu"
+    tools:context=".StudyLessonActivity">
+
+
+    <item
+        android:id="@+id/searchBluetooth"
+        android:icon="@drawable/bluetooth"
+        android:title="Search Devices"
+        app:showAsAction="ifRoom"
+
+        />
+
+    <item
+        android:id="@+id/nextLesson"
+        android:title="Next Lesson"
+        app:showAsAction="collapseActionView"
+
+        />
+    <!-- android:actionViewClass="android.widget.Button" -->
+    <item
+        android:id="@+id/prevLesson"
+        android:title="Previous Lesson"
+        app:showAsAction="collapseActionView"
+
+        />
+    <item
+        android:id="@+id/goToLessonList"
+        android:title="Go to Lesson List"
+        app:showAsAction="collapseActionView"
+
+        />
+    <item
+        android:id="@+id/goToCourseList"
+        android:title="Go to Course List"
+        app:showAsAction="collapseActionView"
+
+        />
+    <!--
+    <item
+        android:id="@+id/test"
+        android:title="submenu">
+        <menu xmlns:android="http://schemas.android.com/apk/res/android">
+            <item
+                android:id="@+id/new_game"
+                android:title="nested"
+                app:showAsAction="collapseActionView" />
+            <item
+                android:id="@+id/help"
+                android:title="nested2"
+                app:showAsAction="collapseActionView" />
+        </menu>
+    </item>
+    -->
+</menu>
