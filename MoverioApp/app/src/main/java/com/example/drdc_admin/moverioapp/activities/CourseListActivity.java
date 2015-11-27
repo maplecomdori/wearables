@@ -20,9 +20,15 @@ import com.example.drdc_admin.moverioapp.classes.Course;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity for displaying all the courses for a particular student
+ * Make your selection using myo gestures in this activity
+ */
+
 public class CourseListActivity extends AppCompatActivity {
 
     private static final String TAG = "CourseListActivity";
+    public static String course = "";
 
     ListView listview;
     List<Course> courses;
@@ -30,22 +36,27 @@ public class CourseListActivity extends AppCompatActivity {
     List<String> listDescriptions;
     int drawableID;
     CourseListAdapter adapter;
-    public static int counter = 0;
 
-    // called when LocalBroadcastManager sends something
+    // position keeps track of the position in the list
+    public static int position = 0;
+
+    /**
+     *     called when LocalBroadcastManager (from MainActivity) sends something
+     *     enables getting and handling messages when this activity is the current activity
+     */
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             // Extract data included in the Intent
             String myoGesture = intent.getStringExtra("gesture");
             Log.i(TAG, "Got message: " + myoGesture);
-            Log.i(TAG, "counter = " + counter);
+            Log.i(TAG, "position = " + position);
 //            Log.i(TAG, "is courses null? " + courses.toString());
 
-            // take actions depending on the passed gesture
+            // take actions depending on the received gesture
             handleGesture(context, myoGesture);
 
-            // refill the listview
+            // regenerate the listview
             listview.setAdapter(adapter);
         }
     };
@@ -80,7 +91,7 @@ public class CourseListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Register mMessageReceiver to receive messages.
+        // Register mMessageReceiver to receive messages only when this activity is the current activity.
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter("myo-event"));
     }
@@ -89,12 +100,13 @@ public class CourseListActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        // Deregister from BroadCastManager to prevent getting messages at unwanted times
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
     }
 
 
     /**
-     * add course contents instead of retrieving it from database
+     * manually add course contents instead of retrieving it from database
      */
     private void hardcoding() {
         Course testone = new Course("Chopper", "Build a chopper");
@@ -110,38 +122,41 @@ public class CourseListActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * translate the given myo gesture and reflect it in this activity
+     * @param context
+     * @param gesture myo gesture string sent from the phone
+     */
     private void handleGesture(Context context, String gesture) {
         int h1 = listview.getHeight();
-        int h2 = adapter.getView(counter, listview, listview).getHeight();
+        int h2 = adapter.getView(position, listview, listview).getHeight();
         Log.i(TAG, "" + h1 + " " + h2);
-        listview.setSelectionFromTop(counter, h1/2 - h2/2);
+        listview.setSelectionFromTop(position, h1/2 - h2/2);
         listview.setSelection(1);
 
         switch (gesture) {
-            case "wave out":
-
-                counter++;
-                if (courses.size() <= counter) {
-                    counter = 0;
+            case "wave out": // move to the next item in the list
+                position++;
+                if (courses.size() <= position) {
+                    position = 0;
                 }
                 break;
-            case "wave in":
-//                listview.setSelection(counter);
-                counter--;
-                if (counter < 0) {
-                    counter = courses.size() - 1;
+            case "wave in": // move to the prev item in the list
+//                listview.setSelection(position);
+                position--;
+                if (position < 0) {
+                    position = courses.size() - 1;
                 }
                 break;
-            case "fist":
-                // start lesson
-                Log.i(TAG, "item = " + adapter.getItem(counter));
-                String courseTitle = ((Course) adapter.getItem(counter)).getTitle();
+            case "fist": // select this item in the list to go to LessonListActivity
+                Log.i(TAG, "item = " + adapter.getItem(position));
+                String courseTitle = ((Course) adapter.getItem(position)).getTitle();
                 Intent i = new Intent(context, LessonListActivity.class);
                 i.putExtra("title", courseTitle);
                 startActivity(i);
 
-                // reset counter value for later
-                counter = 0;
+                // reset position value for later
+                position = 0;
                 break;
         }
     }

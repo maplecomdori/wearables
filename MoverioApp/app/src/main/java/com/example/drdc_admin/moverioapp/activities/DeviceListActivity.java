@@ -23,14 +23,17 @@ import com.example.drdc_admin.moverioapp.R;
 
 import java.util.Set;
 
+/**
+ * Activity for finding and connecting to other bluetooth devices
+ */
+
 public class DeviceListActivity extends Activity {
 
     private static final String TAG = "DeviceListActivity";
     private BluetoothAdapter mBtAdapter;
     public static String EXTRA_DEVICE_ADDRESS = "device_address";
-    /**
-     * Newly discovered devices
-     */
+
+    // Newly discovered devices
     private ArrayAdapter<String> mNewDevicesArrayAdapter;
 
     @Override
@@ -38,7 +41,7 @@ public class DeviceListActivity extends Activity {
         super.onCreate(savedInstanceState);
 
 
-        // display circle in the action bar
+        // display rotating circle in the action bar
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_device_list);
         // Get the local Bluetooth adapter
@@ -186,6 +189,7 @@ public class DeviceListActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
     /**
      * Makes this device discoverable.
      */
@@ -201,7 +205,7 @@ public class DeviceListActivity extends Activity {
      * Start device discover with the BluetoothAdapter
      */
     private void doDiscovery() {
-        Log.d(TAG, "doDiscovery()");
+//        Log.d(TAG, "in doDiscovery()");
 
         // Indicate scanning in the title
         setProgressBarIndeterminateVisibility(true);

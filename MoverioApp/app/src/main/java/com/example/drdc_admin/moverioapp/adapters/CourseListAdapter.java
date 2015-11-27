@@ -114,7 +114,7 @@ public class CourseListAdapter extends BaseAdapter {
         relativeLayout.setOnClickListener(courseListener);
 
         // if this is the selected one, change the color
-        if (position == CourseListActivity.counter) {
+        if (position == CourseListActivity.position) {
             relativeLayout.setBackgroundResource(R.drawable.list_item_selected);
 
         }

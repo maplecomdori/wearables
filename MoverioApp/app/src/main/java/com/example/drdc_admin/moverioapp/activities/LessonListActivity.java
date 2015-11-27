@@ -17,6 +17,10 @@ import com.example.drdc_admin.moverioapp.classes.Lesson;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activity for displaying all the steps for a particular course from CourseListActivity
+ * Make your selection using myo gestures in this activity
+ */
 public class LessonListActivity extends AppCompatActivity {
 
     private static final String TAG = "LessonListActivity";
@@ -29,44 +33,52 @@ public class LessonListActivity extends AppCompatActivity {
     public static int counter = 0;
     LessonListAdapter adapter;
 
+    /**
+     *     called when LocalBroadcastManager (from MainActivity) sends something
+     *     enables getting and handling messages when this activity is the current activity
+     */
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String myoGesture = intent.getStringExtra("gesture");
             Log.i(TAG, "Got message: " + myoGesture);
-            Log.i(TAG, "counter = " + counter);
+            Log.i(TAG, "position = " + counter);
 
             handleGesture(context, myoGesture);
 
-            // refill the listview
+            // regenerate the listview
             listview.setAdapter(adapter);
 
         }
     };
 
+    /**
+     * translate the given myo gesture and reflect it in this activity
+     * @param context
+     * @param gesture myo gesture string sent from the phone
+     */
     private void handleGesture(Context context, String gesture) {
         switch (gesture) {
-            case "wave out":
+            case "wave out": // move to the next item in the list
                 counter++;
                 if (lessons.size() <= counter) {
                     counter = 0;
                 }
                 break;
-            case "wave in":
+            case "wave in": // move to the prev item in the list
                 counter--;
                 if (counter < 0) {
                     counter = lessons.size() - 1;
                 }
                 break;
-            case "fist":
-                // start lesson
+            case "fist": // select this item in the list to study this step
                 Log.i(TAG, "item = " + adapter.getItem(counter));
                 int videoRID = ((Lesson) adapter.getItem(counter)).getVideoRID();
                 Intent i = new Intent(context, StudyLessonActivity.class);
                 i.putExtra("RID", videoRID);
                 startActivity(i);
 
-                // reset counter value for later
+                // reset position value for later
                 counter = 0;
                 break;
             case "fingers spread":
@@ -91,32 +103,29 @@ public class LessonListActivity extends AppCompatActivity {
 
         listview.setAdapter(adapter);
 
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        // Register mMessageReceiver to receive messages only when this activity is the current activity.
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter("myo-event"));
     }
 
 
-    /**
-     * Dispatch onPause() to fragments.
-     */
+
     @Override
     protected void onPause() {
         super.onPause();
+        // Deregister from BroadCastManager to prevent getting messages at unwanted times
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
 
     }
 
 
-
-
     /**
-     * add course contents instead of retrieving it from database
+     * manually add steps instead of retrieving it from database
      */
     private void hardcoding() {
         Lesson lessonOne = new Lesson("Step1", "Add some part");

@@ -21,7 +21,10 @@ import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.example.drdc_admin.moverioapp.R;
-
+/**
+ * Activity that displays study material (step / content) selected from LessonListActivity
+ * 
+ */
 public class StudyLessonActivity extends AppCompatActivity {
 
     private Menu menu;
@@ -46,6 +49,11 @@ public class StudyLessonActivity extends AppCompatActivity {
     MediaController mc;
     Intent intent;
     Toolbar toolbar;
+
+    /**
+     *     called when LocalBroadcastManager (from MainActivity) sends something
+     *     enables getting and handling messages when this activity is the current activity
+     */
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -57,15 +65,31 @@ public class StudyLessonActivity extends AppCompatActivity {
         }
     };
 
-
-
+    /**
+     * translate the given myo gesture and reflect it in this activity
+     * the app takes different actions for the same gesture depending on
+     * whether the option list is open or not
+     * @param context
+     * @param gesture myo gesture string sent from the phone
+     */
     private void handleGesture(Context context, String gesture) {
         switch (gesture) {
-            case "wave out": //FAST FORWARD?
+            case "fingers spread":   //open or close options menu
                 if (toolbar.isOverflowMenuShowing()) {
+                    toolbar.hideOverflowMenu();
+                } else {
+                    toolbar.showOverflowMenu();
+                }
+
+//                http://stackoverflow.com/questions/13615229/android-programmatically-select-menu-option
+                // http://stackoverflow.com/questions/3133318/how-to-open-the-options-menu-programmatically
+                break;
+            case "wave out":
+                if (toolbar.isOverflowMenuShowing()) {
+                    // move down the option list
                     moveUporDown("down");
 
-                } else {
+                } else { // menu is not open
                     // go to prev / next item on the overflow menu
                 }
                 // play or go to next step
@@ -75,7 +99,7 @@ public class StudyLessonActivity extends AppCompatActivity {
                 break;
             case "wave in":
                 if (toolbar.isOverflowMenuShowing()) {
-
+                    // move up the option list
                     moveUporDown("up");
 
                 } else {
@@ -91,33 +115,19 @@ public class StudyLessonActivity extends AppCompatActivity {
 
                 } else {
                     if (videoView.isPlaying()) {
-                        Log.i(TAG, "Pause Video");
+                        // pause the video
+//                        Log.i(TAG, "Pause Video");
                         videoView.pause();
                         playPosition = videoView.getCurrentPosition();
 //                    Log.i(TAG, "playPosition = " + playPosition);
                     } else {
+                        // resume video
                         // http://examples.javacodegeeks.com/android/android-videoview-example/
                         videoView.seekTo(playPosition);
                         videoView.start();
-                        Log.i(TAG, "Resume Video");
+//                        Log.i(TAG, "Resume Video");
                     }
-
                 }
-                break;
-            case "fingers spread":   //options
-                if (toolbar.isOverflowMenuShowing()) {
-                    toolbar.hideOverflowMenu();
-                } else {
-                    toolbar.showOverflowMenu();
-                }
-
-
-//                http://stackoverflow.com/questions/13615229/android-programmatically-select-menu-option
-                // http://stackoverflow.com/questions/3133318/how-to-open-the-options-menu-programmatically
-                // next or prev step
-                // fast forward or rewind
-                // go to course list
-                // back button (lesson list)
                 break;
         }
     }
@@ -225,6 +235,7 @@ public class StudyLessonActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        // Deregister from BroadCastManager to prevent getting messages at unwanted times
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
     }
 
@@ -232,16 +243,24 @@ public class StudyLessonActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        // Register mMessageReceiver to receive messages only when this activity is the current activity.
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
                 new IntentFilter("myo-event"));
 
     }
 
+    /**
+     * travel within the options menu
+     * place the check mark beside the option item
+     * @param upordown "up" or "down"
+     */
     private void moveUporDown(String upordown) {
 
+        // remove the checkmark
         menu.getItem(menuItemPosition).setCheckable(false);
         menu.getItem(menuItemPosition).setChecked(false);
 
+        // update the position in the list
         if (upordown.equals("down")) {
             menuItemPosition++;
         }
@@ -249,6 +268,7 @@ public class StudyLessonActivity extends AppCompatActivity {
             menuItemPosition--;
         }
 
+        // reset if the position is too large or too small
         if (menuItemPosition > menu.size() - 1) {
             menuItemPosition = 1;
         }
@@ -257,6 +277,7 @@ public class StudyLessonActivity extends AppCompatActivity {
             // item 0 is for Bluetootht
         }
 
+        // put the check mark
         menu.getItem(menuItemPosition).setCheckable(true);
         menu.getItem(menuItemPosition).setChecked(true);
 
