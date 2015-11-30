@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LessonListMenu"
+    tools:context=".LessonListActivity">
+
+    <item
+        android:id="@+id/goBack"
+        android:title="Go Back to Course List"
+        app:showAsAction="collapseActionView"
+        />
+
+
+
+</menu>

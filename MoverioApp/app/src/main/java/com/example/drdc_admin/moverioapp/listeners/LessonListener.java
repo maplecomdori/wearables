@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
-import com.example.drdc_admin.moverioapp.activities.StudyLessonActivity;
+import com.example.drdc_admin.moverioapp.activities.ContentActivity;
 
 /**
  * Created by DRDC_Admin on 13/10/2015.
@@ -26,7 +26,7 @@ public class LessonListener implements View.OnClickListener {
      */
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(context, StudyLessonActivity.class);
+        Intent intent = new Intent(context, ContentActivity.class);
         intent.putExtra("RID", videoRID);
         context.startActivity(intent);
     }

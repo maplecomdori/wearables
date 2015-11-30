@@ -25,12 +25,12 @@ import com.example.drdc_admin.moverioapp.R;
  * Activity that displays study material (step / content) selected from LessonListActivity
  * 
  */
-public class StudyLessonActivity extends AppCompatActivity {
+public class ContentActivity extends AppCompatActivity {
 
     private Menu menu;
     private MediaController mediaControls;
     private int playPosition = 0;
-    private int menuItemPosition = 1;
+    private int menuItemPosition = 0;
     private ProgressDialog progressDialog;
     private String path;
     private Bundle extras;
@@ -43,7 +43,7 @@ public class StudyLessonActivity extends AppCompatActivity {
     private boolean mIsVideoSizeKnown = false;
     private boolean mIsVideoReadyToBePlayed = false;
 
-    private static final String TAG = "StudyLessonActivity";
+    private static final String TAG = "ContentActivity";
 
     VideoView videoView;
     MediaController mc;
@@ -98,6 +98,7 @@ public class StudyLessonActivity extends AppCompatActivity {
 
                 break;
             case "wave in":
+                // FAST FORWARD / REWIND 5~10 SECONDs
                 if (toolbar.isOverflowMenuShowing()) {
                     // move up the option list
                     moveUporDown("up");
@@ -137,7 +138,7 @@ public class StudyLessonActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_studylesson, menu);
+        getMenuInflater().inflate(R.menu.menu_content_activity, menu);
 
         // check the first menu item as default
         toolbar.getMenu().getItem(menuItemPosition).setCheckable(true);
@@ -157,11 +158,11 @@ public class StudyLessonActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_study_lesson);
+        setContentView(R.layout.activity_content);
 
         //TODO i dont know what to do
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("TEST");
+        toolbar = (Toolbar) findViewById(R.id.studyStepToolbar);
+        toolbar.setTitle("Step ###");
         setSupportActionBar(toolbar);
 
         intent = getIntent();
@@ -174,11 +175,11 @@ public class StudyLessonActivity extends AppCompatActivity {
 //        videoView.requestFocus();
 
 
-        mediaControls = new MediaController(StudyLessonActivity.this);
+        mediaControls = new MediaController(ContentActivity.this);
 
 
 //        // create a progress bar while the video file is loading
-//        progressDialog = new ProgressDialog(StudyLessonActivity.this);
+//        progressDialog = new ProgressDialog(ContentActivity.this);
 //        // set a title for the progress bar
 //        progressDialog.setTitle("Wearables");
 //        // set a message for the progress bar

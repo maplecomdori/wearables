@@ -1,18 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/searchLessonMenu"
-    tools:context=".StudyLessonActivity">
+    tools:context=".ContentActivity">
+
 
 
     <item
-        android:id="@+id/searchBluetooth"
-        android:icon="@drawable/bluetooth"
-        android:title="Search Devices"
-        app:showAsAction="ifRoom"
+        android:id="@+id/goBack"
+        android:title="Go Back to Step List"
+        app:showAsAction="collapseActionView"
 
         />
-
     <item
         android:id="@+id/nextLesson"
         android:title="Next Lesson"

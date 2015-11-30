@@ -7,7 +7,9 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.widget.ListView;
 
 import com.example.drdc_admin.moverioapp.R;
@@ -32,6 +34,8 @@ public class LessonListActivity extends AppCompatActivity {
     int drawableID;
     public static int counter = 0;
     LessonListAdapter adapter;
+    private int menuItemPosition = 0;
+    Toolbar toolbar;
 
     /**
      *     called when LocalBroadcastManager (from MainActivity) sends something
@@ -51,6 +55,45 @@ public class LessonListActivity extends AppCompatActivity {
 
         }
     };
+
+    /**
+     * Initialize the contents of the Activity's standard options menu.  You
+     * should place your menu items in to <var>menu</var>.
+     * <p/>
+     * <p>This is only called once, the first time the options menu is
+     * displayed.  To update the menu every time it is displayed, see
+     * {@link #onPrepareOptionsMenu}.
+     * <p/>
+     * <p>The default implementation populates the menu with standard system
+     * menu items.  These are placed in the {@link Menu#CATEGORY_SYSTEM} group so that
+     * they will be correctly ordered with application-defined menu items.
+     * Deriving classes should always call through to the base implementation.
+     * <p/>
+     * <p>You can safely hold on to <var>menu</var> (and any items created
+     * from it), making modifications to it as desired, until the next
+     * time onCreateOptionsMenu() is called.
+     * <p/>
+     * <p>When you add items to the menu, you can implement the Activity's
+     * {@link #onOptionsItemSelected} method to handle them there.
+     *
+     * @param menu The options menu in which you place your items.
+     * @return You must return true for the menu to be displayed;
+     * if you return false it will not be shown.
+     * @see #onPrepareOptionsMenu
+     * @see #onOptionsItemSelected
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+
+        getMenuInflater().inflate(R.menu.menu_step_list, menu);
+
+        // check the first menu item as default
+        toolbar.getMenu().getItem(menuItemPosition).setCheckable(true);
+        toolbar.getMenu().getItem(menuItemPosition).setChecked(true);
+
+        return true;
+    }
 
     /**
      * translate the given myo gesture and reflect it in this activity
@@ -74,7 +117,7 @@ public class LessonListActivity extends AppCompatActivity {
             case "fist": // select this item in the list to study this step
                 Log.i(TAG, "item = " + adapter.getItem(counter));
                 int videoRID = ((Lesson) adapter.getItem(counter)).getVideoRID();
-                Intent i = new Intent(context, StudyLessonActivity.class);
+                Intent i = new Intent(context, ContentActivity.class);
                 i.putExtra("RID", videoRID);
                 startActivity(i);
 
@@ -90,8 +133,10 @@ public class LessonListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lesson_list);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+
+        toolbar = (Toolbar) findViewById(R.id.stepListToolbar);
+        toolbar.setTitle("Course Name");
+        setSupportActionBar(toolbar);
 
         listview = (ListView) findViewById(R.id.lessonListView);
         // TODO:    get list of all the courses instead of hardcoding

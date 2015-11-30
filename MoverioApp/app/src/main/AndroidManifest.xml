@@ -41,12 +41,12 @@
             android:name=".activities.LessonListActivity"
             android:label="@string/title_activity_lesson_list"
             android:screenOrientation="landscape"
-
+            android:theme="@style/AppTheme.NoActionBar"
             >
 
         </activity>
         <activity
-            android:name=".activities.StudyLessonActivity"
+            android:name=".activities.ContentActivity"
             android:label="@string/title_activity_study_lesson"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar">
