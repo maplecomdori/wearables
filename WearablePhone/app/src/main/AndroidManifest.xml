@@ -47,18 +47,6 @@
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" >
         </activity>
-        <activity
-            android:name=".WatchLessonActivity"
-            android:label="@string/title_activity_watch_lesson"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
-        <activity
-            android:name=".LessonListActivity"
-            android:label="@string/title_activity_lesson_list"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
-        <activity android:name=".CourseListActivity" >
-        </activity>
     </application>
 
 </manifest>

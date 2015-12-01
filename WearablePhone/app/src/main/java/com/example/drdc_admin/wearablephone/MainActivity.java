@@ -116,6 +116,9 @@ public class MainActivity extends AppCompatActivity {
                     tv_myoMsg.setText(getString(R.string.hello_world));
                     break;
                 case REST:
+                    btMsg = "rest";
+                    tv_myoMsg.setText(getString(R.string.pose_rest));
+                    break;
                 case DOUBLE_TAP:
                     int restTextId = R.string.hello_world;
                     switch (myo.getArm()) {
