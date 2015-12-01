@@ -21,7 +21,7 @@ public class LessonListener implements View.OnClickListener {
 
     /**
      * Called when a view has been clicked
-     * pass which course the user wants to LessonListActivity
+     * pass which course the user wants to StepListActivity
      * @param v The view that was clicked.
      */
     @Override

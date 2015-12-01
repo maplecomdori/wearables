@@ -146,10 +146,10 @@ public class CourseListActivity extends AppCompatActivity {
                     position = courses.size() - 1;
                 }
                 break;
-            case "fist": // select this item in the list to go to LessonListActivity
+            case "fist": // select this item in the list to go to StepListActivity
                 Log.i(TAG, "item = " + adapter.getItem(position));
                 String courseTitle = ((Course) adapter.getItem(position)).getTitle();
-                Intent i = new Intent(context, LessonListActivity.class);
+                Intent i = new Intent(context, StepListActivity.class);
                 i.putExtra("title", courseTitle);
                 startActivity(i);
 

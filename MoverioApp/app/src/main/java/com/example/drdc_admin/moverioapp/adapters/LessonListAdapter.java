@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.drdc_admin.moverioapp.R;
-import com.example.drdc_admin.moverioapp.activities.LessonListActivity;
+import com.example.drdc_admin.moverioapp.activities.StepListActivity;
 import com.example.drdc_admin.moverioapp.classes.Lesson;
 import com.example.drdc_admin.moverioapp.listeners.LessonListener;
 
@@ -106,7 +106,7 @@ public class LessonListAdapter extends BaseAdapter {
 
 
         // if this is the selected one, change the color
-        if (position == LessonListActivity.counter) {
+        if (position == StepListActivity.counter) {
             relativeLayout.setBackgroundResource(R.drawable.list_item_selected);
         }
 

@@ -8,28 +8,25 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.example.drdc_admin.moverioapp.R;
 /**
- * Activity that displays study material (step / content) selected from LessonListActivity
+ * Activity that displays study material (step / content) selected from StepListActivity
  * 
  */
 public class ContentActivity extends AppCompatActivity {
 
     private Menu menu;
     private MediaController mediaControls;
-    private int playPosition = 0;
+    private static int playPosition = 0;
     private int menuItemPosition = 0;
     private ProgressDialog progressDialog;
     private String path;
@@ -61,7 +58,6 @@ public class ContentActivity extends AppCompatActivity {
             Log.i(TAG, "Got message: " + myoGesture);
 
             handleGesture(context, myoGesture);
-
         }
     };
 
@@ -73,12 +69,20 @@ public class ContentActivity extends AppCompatActivity {
      * @param gesture myo gesture string sent from the phone
      */
     private void handleGesture(Context context, String gesture) {
+
+        // position in the video
+        int tmpPosition = videoView.getCurrentPosition();
         switch (gesture) {
             case "fingers spread":   //open or close options menu
                 if (toolbar.isOverflowMenuShowing()) {
                     toolbar.hideOverflowMenu();
+                    videoView.seekTo(playPosition);
+                    videoView.start();
                 } else {
+                    videoView.pause();
+                    playPosition = videoView.getCurrentPosition();
                     toolbar.showOverflowMenu();
+
                 }
 
 //                http://stackoverflow.com/questions/13615229/android-programmatically-select-menu-option
@@ -90,21 +94,20 @@ public class ContentActivity extends AppCompatActivity {
                     moveUporDown("down");
 
                 } else { // menu is not open
-                    // go to prev / next item on the overflow menu
+                    // rewind 5 seconds
+                    videoView.seekTo(tmpPosition - (5 * 1000));
+
                 }
-                // play or go to next step
-//                videoView.setVideoURI();
-//                videoView.requestFocus();
 
                 break;
             case "wave in":
-                // FAST FORWARD / REWIND 5~10 SECONDs
                 if (toolbar.isOverflowMenuShowing()) {
                     // move up the option list
                     moveUporDown("up");
 
                 } else {
-                    // go to prev / next item on the overflow menu
+                    // fast forward 5 sec
+                    videoView.seekTo(tmpPosition + (5 * 1000));
 
                 }
                 // if the user is not navigating options
@@ -113,6 +116,7 @@ public class ContentActivity extends AppCompatActivity {
             case "fist":     // pause or resume
 
                 if (toolbar.isOverflowMenuShowing()) {
+                    // take actions
 
                 } else {
                     if (videoView.isPlaying()) {
@@ -150,7 +154,8 @@ public class ContentActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
+            case R.id.goBack:
+                finish();
         }
         return false;
     }
@@ -221,6 +226,8 @@ public class ContentActivity extends AppCompatActivity {
 // http://www.java2s.com/Code/Android/Media/UsingMediaPlayertoplayVideoandAudio.htm
         videoView.requestFocus();
         videoView.start();
+/*
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -230,7 +237,7 @@ public class ContentActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
+ */
     }
 
     @Override

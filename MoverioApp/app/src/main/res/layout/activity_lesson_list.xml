@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:fitsSystemWindows="true"
-    tools:context="com.example.drdc_admin.moverioapp.activities.LessonListActivity">
+    tools:context="com.example.drdc_admin.moverioapp.activities.StepListActivity">
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"

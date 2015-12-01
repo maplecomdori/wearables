@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.example.drdc_admin.moverioapp.R;
@@ -23,9 +24,9 @@ import java.util.List;
  * Activity for displaying all the steps for a particular course from CourseListActivity
  * Make your selection using myo gestures in this activity
  */
-public class LessonListActivity extends AppCompatActivity {
+public class StepListActivity extends AppCompatActivity {
 
-    private static final String TAG = "LessonListActivity";
+    private static final String TAG = "StepListActivity";
 
     ListView listview;
     List<Lesson> lessons;
@@ -148,6 +149,15 @@ public class LessonListActivity extends AppCompatActivity {
 
         listview.setAdapter(adapter);
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.goBack:
+                finish();
+        }
+        return false;
     }
 
     @Override
