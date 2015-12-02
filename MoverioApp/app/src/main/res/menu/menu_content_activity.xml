@@ -3,7 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ContentActivity">
 
-
+    <item
+        android:id="@+id/replay"
+        android:title="Replay"
+        app:showAsAction="collapseActionView"
+        />
 
     <item
         android:id="@+id/goBack"
@@ -12,24 +16,19 @@
 
         />
     <item
-        android:id="@+id/nextLesson"
-        android:title="Next Lesson"
+        android:id="@+id/nextStep"
+        android:title="Next Step"
         app:showAsAction="collapseActionView"
 
         />
     <!-- android:actionViewClass="android.widget.Button" -->
     <item
-        android:id="@+id/prevLesson"
-        android:title="Previous Lesson"
+        android:id="@+id/prevStep"
+        android:title="Previous Step"
         app:showAsAction="collapseActionView"
 
         />
-    <item
-        android:id="@+id/goToLessonList"
-        android:title="Go to Lesson List"
-        app:showAsAction="collapseActionView"
 
-        />
     <item
         android:id="@+id/goToCourseList"
         android:title="Go to Course List"

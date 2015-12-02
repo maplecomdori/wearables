@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:text="Select a lesson"
+        android:text="@string/stepListTitle"
         android:textSize="@dimen/abc_text_size_large_material" />
 
     <ListView

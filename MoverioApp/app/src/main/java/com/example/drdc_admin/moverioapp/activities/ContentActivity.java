@@ -128,7 +128,7 @@ public class ContentActivity extends AppCompatActivity {
                     } else {
                         // resume video
                         // http://examples.javacodegeeks.com/android/android-videoview-example/
-                        videoView.seekTo(playPosition);
+                        // videoView.seekTo(playPosition);
                         videoView.start();
 //                        Log.i(TAG, "Resume Video");
                     }
@@ -138,14 +138,18 @@ public class ContentActivity extends AppCompatActivity {
     }
 
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_content_activity, menu);
 
+        for (int i = 0; i < menu.size(); i ++) {
+            menu.getItem(i).setCheckable(true);
+        }
         // check the first menu item as default
-        toolbar.getMenu().getItem(menuItemPosition).setCheckable(true);
         toolbar.getMenu().getItem(menuItemPosition).setChecked(true);
 
         return true;
@@ -154,11 +158,27 @@ public class ContentActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.replay:
+                videoView.seekTo(0);
+                videoView.start();
+                break;
             case R.id.goBack:
                 finish();
+                break;
+            case R.id.nextStep:
+
+                break;
+
+            case R.id.prevStep:
+
+                break;
+
         }
         return false;
     }
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -258,6 +278,33 @@ public class ContentActivity extends AppCompatActivity {
     }
 
     /**
+     * Prepare the Screen's standard options menu to be displayed.  This is
+     * called right before the menu is shown, every time it is shown.  You can
+     * use this method to efficiently enable/disable items or otherwise
+     * dynamically modify the contents.
+     * <p/>
+     * <p>The default implementation updates the system menu items based on the
+     * activity's state.  Deriving classes should always call through to the
+     * base class implementation.
+     *
+     * @param menu The options menu as last shown or first initialized by
+     *             onCreateOptionsMenu().
+     * @return You must return true for the menu to be displayed;
+     * if you return false it will not be shown.
+     * @see #onCreateOptionsMenu
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+
+
+        // menu.getItem(menuItemPosition).setCheckable(true);
+        menu.getItem(menuItemPosition).setChecked(true);
+
+        return true;
+    }
+
+    /**
      * travel within the options menu
      * place the check mark beside the option item
      * @param upordown "up" or "down"
@@ -265,8 +312,7 @@ public class ContentActivity extends AppCompatActivity {
     private void moveUporDown(String upordown) {
 
         // remove the checkmark
-        menu.getItem(menuItemPosition).setCheckable(false);
-        menu.getItem(menuItemPosition).setChecked(false);
+         menu.getItem(menuItemPosition).setChecked(false);
 
         // update the position in the list
         if (upordown.equals("down")) {
@@ -278,15 +324,15 @@ public class ContentActivity extends AppCompatActivity {
 
         // reset if the position is too large or too small
         if (menuItemPosition > menu.size() - 1) {
-            menuItemPosition = 1;
+            menuItemPosition = 0;
         }
-        else if (menuItemPosition < 1) {
+        else if (menuItemPosition < 0) {
             menuItemPosition = menu.size() - 1;
-            // item 0 is for Bluetootht
+            // item 0 is for Bluetoothtet
         }
 
         // put the check mark
-        menu.getItem(menuItemPosition).setCheckable(true);
+//        invalidateOptionsMenu();
         menu.getItem(menuItemPosition).setChecked(true);
 
     }
