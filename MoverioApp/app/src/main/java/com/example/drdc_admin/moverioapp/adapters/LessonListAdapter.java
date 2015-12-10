@@ -86,7 +86,7 @@ public class LessonListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         Lesson lesson = (Lesson) lessonList.get(position);
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        convertView = mInflater.inflate(R.layout.fragment_lesson_list_item, null);
+        convertView = mInflater.inflate(R.layout.fragment_step_list_item, null);
 
         ImageView lessonImg = (ImageView) convertView.findViewById(R.id.lesson_img);
         TextView lessonTitle = (TextView) convertView.findViewById((R.id.lesson_title));
@@ -106,7 +106,7 @@ public class LessonListAdapter extends BaseAdapter {
 
 
         // if this is the selected one, change the color
-        if (position == StepListActivity.counter) {
+        if (position == StepListActivity.listPosition) {
             relativeLayout.setBackgroundResource(R.drawable.list_item_selected);
         }
 

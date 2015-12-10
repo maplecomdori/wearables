@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+import com.example.drdc_admin.moverioapp.Constants;
 import com.example.drdc_admin.moverioapp.R;
 /**
  * Activity that displays study material (step / content) selected from StepListActivity
@@ -40,6 +40,7 @@ public class ContentActivity extends AppCompatActivity {
     private boolean mIsVideoSizeKnown = false;
     private boolean mIsVideoReadyToBePlayed = false;
 
+    private String videoFileName;
     private static final String TAG = "ContentActivity";
 
     VideoView videoView;
@@ -92,31 +93,25 @@ public class ContentActivity extends AppCompatActivity {
                 if (toolbar.isOverflowMenuShowing()) {
                     // move down the option list
                     moveUporDown("down");
-
                 } else { // menu is not open
                     // rewind 5 seconds
                     videoView.seekTo(tmpPosition - (5 * 1000));
-
                 }
-
                 break;
             case "wave in":
                 if (toolbar.isOverflowMenuShowing()) {
                     // move up the option list
                     moveUporDown("up");
-
                 } else {
                     // fast forward 5 sec
                     videoView.seekTo(tmpPosition + (5 * 1000));
-
                 }
-                // if the user is not navigating options
-                // play or prev step
                 break;
             case "fist":     // pause or resume
 
                 if (toolbar.isOverflowMenuShowing()) {
                     // take actions
+                    onOptionsItemSelected(menu.getItem(menuItemPosition));
 
                 } else {
                     if (videoView.isPlaying()) {
@@ -140,44 +135,46 @@ public class ContentActivity extends AppCompatActivity {
 
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        this.menu = menu;
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_content_activity, menu);
 
-        for (int i = 0; i < menu.size(); i ++) {
-            menu.getItem(i).setCheckable(true);
+
+    /**
+     * play the next or prev video
+     * @param nextOrPrev "next" or "prev"
+     */
+    private void playStep(String nextOrPrev) {
+
+        // extract nondigits from the file
+        int currentStep = Integer.parseInt(videoFileName.replaceAll("[^0-9]", ""));
+        Log.i(TAG, "currentStep = " + currentStep);
+        Log.i(TAG, "videoFileName = " + videoFileName);
+
+        // change airplanestep1 to airplanestep2
+        String chars = videoFileName.replaceAll("[0-9]", "");
+        int newStep = 0;
+        if (nextOrPrev.equals("next")) {
+            newStep = currentStep + 1;
         }
-        // check the first menu item as default
-        toolbar.getMenu().getItem(menuItemPosition).setChecked(true);
+        else if (nextOrPrev.equals("prev")){
 
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.replay:
-                videoView.seekTo(0);
-                videoView.start();
-                break;
-            case R.id.goBack:
-                finish();
-                break;
-            case R.id.nextStep:
-
-                break;
-
-            case R.id.prevStep:
-
-                break;
-
+            newStep = currentStep - 1;
+            if (newStep < 1) {
+                newStep = 1;
+            }
         }
-        return false;
+        String newFileName = chars + newStep;
+        Log.i(TAG, "chars = " + chars);
+        Log.i(TAG, "newStep = " + newStep);
+        Log.i(TAG, "newFileName = " + newFileName);
+
+        // update the variable videoFileName
+        videoFileName = newFileName;
+
+        // load the next video
+        //TODO remove buffering
+        videoView.setVideoPath("/storage/sdcard1/airplane/" + videoFileName + ".mp4");
+        videoView.start();
+
     }
-
-
 
 
     @Override
@@ -185,14 +182,15 @@ public class ContentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content);
 
-        //TODO i dont know what to do
         toolbar = (Toolbar) findViewById(R.id.studyStepToolbar);
         toolbar.setTitle("Step ###");
         setSupportActionBar(toolbar);
 
+        // extract the filename and R.id for the video the user selected
         intent = getIntent();
-        String videoSource = intent.getStringExtra("filename");
-        int videoRID = intent.getIntExtra("RID", 0);
+        videoFileName = intent.getStringExtra(Constants.VIEDEO_FILENAME);
+        Log.i(TAG, "videoFileName = " + videoFileName );
+        int videoRID = intent.getIntExtra(Constants.VIDEO_RID, 0);
         String uriPath = "android.resource://" + getPackageName() + "/" + videoRID;
 
         videoView = (VideoView) findViewById(R.id.videoView);
@@ -217,8 +215,13 @@ public class ContentActivity extends AppCompatActivity {
         try {
             // set the media controller in the VideoView
             videoView.setMediaController(mediaControls);
-            //set the uri of the video to be played
-            videoView.setVideoURI(Uri.parse(uriPath));
+            // set the uri of the video to be played in the internal storage
+            // videoView.setVideoURI(Uri.parse(uriPath));
+
+            // play video in the sd card
+            videoView.setVideoPath("/storage/sdcard1/airplane/airplanestep1.mp4");
+//            videoView.setVideoPath(Environment.getExternalStorageDirectory().getAbsolutePath() +
+//                    "airplanestep1.mp4");
         } catch (Exception e) {
             Log.e("Error", e.getMessage());
             e.printStackTrace();
@@ -246,18 +249,7 @@ public class ContentActivity extends AppCompatActivity {
 // http://www.java2s.com/Code/Android/Media/UsingMediaPlayertoplayVideoandAudio.htm
         videoView.requestFocus();
         videoView.start();
-/*
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Proceed to the next lesson", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
- */
     }
 
     @Override
@@ -277,32 +269,7 @@ public class ContentActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Prepare the Screen's standard options menu to be displayed.  This is
-     * called right before the menu is shown, every time it is shown.  You can
-     * use this method to efficiently enable/disable items or otherwise
-     * dynamically modify the contents.
-     * <p/>
-     * <p>The default implementation updates the system menu items based on the
-     * activity's state.  Deriving classes should always call through to the
-     * base class implementation.
-     *
-     * @param menu The options menu as last shown or first initialized by
-     *             onCreateOptionsMenu().
-     * @return You must return true for the menu to be displayed;
-     * if you return false it will not be shown.
-     * @see #onCreateOptionsMenu
-     */
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
 
-
-
-        // menu.getItem(menuItemPosition).setCheckable(true);
-        menu.getItem(menuItemPosition).setChecked(true);
-
-        return true;
-    }
 
     /**
      * travel within the options menu
@@ -337,4 +304,39 @@ public class ContentActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_content_activity, menu);
+
+        for (int i = 0; i < menu.size(); i ++) {
+            menu.getItem(i).setCheckable(true);
+        }
+        // check the first menu item as default
+        toolbar.getMenu().getItem(menuItemPosition).setChecked(true);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.replay:
+                videoView.seekTo(0);
+                videoView.start();
+                break;
+            case R.id.goBack:
+                finish();
+                break;
+            case R.id.nextStep:
+                playStep("next");
+                break;
+
+            case R.id.prevStep:
+                playStep("prev");
+                break;
+        }
+        return false;
+    }
 }

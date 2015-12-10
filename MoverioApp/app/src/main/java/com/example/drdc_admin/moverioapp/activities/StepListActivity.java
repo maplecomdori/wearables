@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import com.example.drdc_admin.moverioapp.Constants;
 import com.example.drdc_admin.moverioapp.R;
 import com.example.drdc_admin.moverioapp.adapters.LessonListAdapter;
 import com.example.drdc_admin.moverioapp.classes.Lesson;
@@ -27,14 +28,18 @@ import java.util.List;
 public class StepListActivity extends AppCompatActivity {
 
     private static final String TAG = "StepListActivity";
-
+    private Menu menu;
     ListView listview;
     List<Lesson> lessons;
     List<String> listTitles;
     List<String> listDescriptions;
     int drawableID;
-    public static int counter = 0;
+
+    // tracks which item is selected in the list
+    public static int listPosition = 0;
     LessonListAdapter adapter;
+
+    // track which menu item is selected in the options menu
     private int menuItemPosition = 0;
     Toolbar toolbar;
 
@@ -47,7 +52,7 @@ public class StepListActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             String myoGesture = intent.getStringExtra("gesture");
             Log.i(TAG, "Got message: " + myoGesture);
-            Log.i(TAG, "position = " + counter);
+            Log.i(TAG, "position = " + listPosition);
 
             handleGesture(context, myoGesture);
 
@@ -85,7 +90,7 @@ public class StepListActivity extends AppCompatActivity {
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
+        this.menu = menu;
 
         getMenuInflater().inflate(R.menu.menu_step_list, menu);
 
@@ -104,36 +109,67 @@ public class StepListActivity extends AppCompatActivity {
     private void handleGesture(Context context, String gesture) {
         switch (gesture) {
             case "wave out": // move to the next item in the list
-                counter++;
-                if (lessons.size() <= counter) {
-                    counter = 0;
+                if (toolbar.isOverflowMenuShowing()) {
+
+                } else {
+                    listPosition++;
+                    if (lessons.size() <= listPosition) {
+                        listPosition = 0;
+                    }
                 }
                 break;
             case "wave in": // move to the prev item in the list
-                counter--;
-                if (counter < 0) {
-                    counter = lessons.size() - 1;
+                if (toolbar.isOverflowMenuShowing()) {
+
+                } else {
+                    listPosition--;
+                    if (listPosition < 0) {
+                        listPosition = lessons.size() - 1;
+                    }
+
                 }
                 break;
-            case "fist": // select this item in the list to study this step
-                Log.i(TAG, "item = " + adapter.getItem(counter));
-                int videoRID = ((Lesson) adapter.getItem(counter)).getVideoRID();
-                Intent i = new Intent(context, ContentActivity.class);
-                i.putExtra("RID", videoRID);
-                startActivity(i);
 
-                // reset position value for later
-                counter = 0;
+            case "fist": // select this item in the list to study this step
+                if (toolbar.isOverflowMenuShowing()) {
+                    onOptionsItemSelected(menu.getItem(menuItemPosition));
+                } else {
+                    // Log.i(TAG, "item = " + adapter.getItem(listPosition));
+                    int videoRID = ((Lesson) adapter.getItem(listPosition)).getVideoRID();
+                    String filename = ((Lesson) adapter.getItem(listPosition)).getVideoFileName();
+                    Log.i(TAG, "filename = " + filename);
+
+                    // put the filename and R.id of the video the user selected
+                    Intent i = new Intent(context, ContentActivity.class);
+                    i.putExtra(Constants.VIDEO_RID, videoRID);
+                    i.putExtra(Constants.VIEDEO_FILENAME , filename );
+                    startActivity(i);
+
+                    // reset position value for later
+                    listPosition = 0;
+
+                }
                 break;
             case "fingers spread":
-                finish(); // back button
+                if (toolbar.isOverflowMenuShowing()) {
+                    toolbar.hideOverflowMenu();
+
+                } else {
+                    toolbar.showOverflowMenu();
+                }
+
+//                http://stackoverflow.com/questions/13615229/android-programmatically-select-menu-option
+                // http://stackoverflow.com/questions/3133318/how-to-open-the-options-menu-programmatically
+                break;
+
+
         }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lesson_list);
+        setContentView(R.layout.activity_step_list);
 
         toolbar = (Toolbar) findViewById(R.id.stepListToolbar);
         toolbar.setTitle("Course Name");
@@ -186,8 +222,8 @@ public class StepListActivity extends AppCompatActivity {
         Lesson lessonOne = new Lesson("Step1", "Add some part");
         Lesson lessonTwo = new Lesson("Step2", "remove some part");
         lessonOne.setImgRID(R.drawable.lesson_one);
-        lessonOne.setVideoFileName("lesson2_step_2");
-        lessonOne.setVideoRID(R.raw.lesson2_step_2);
+        lessonOne.setVideoFileName("airplanestep1");
+        lessonOne.setVideoRID(R.raw.airplane_step1);
         lessonTwo.setImgRID(R.drawable.lesson_two);
         lessonTwo.setVideoFileName("lesson2_step_3");
         lessonTwo.setVideoRID(R.raw.tutorial);
