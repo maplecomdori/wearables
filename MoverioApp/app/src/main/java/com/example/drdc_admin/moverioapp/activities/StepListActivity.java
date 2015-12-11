@@ -51,7 +51,7 @@ public class StepListActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String myoGesture = intent.getStringExtra("gesture");
-            Log.i(TAG, "Got message: " + myoGesture);
+//            Log.i(TAG, "Got message: " + myoGesture);
             Log.i(TAG, "position = " + listPosition);
 
             handleGesture(context, myoGesture);

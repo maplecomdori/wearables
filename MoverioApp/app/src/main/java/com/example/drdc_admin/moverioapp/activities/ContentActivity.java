@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -18,9 +19,9 @@ import android.widget.VideoView;
 
 import com.example.drdc_admin.moverioapp.Constants;
 import com.example.drdc_admin.moverioapp.R;
+
 /**
  * Activity that displays study material (step / content) selected from StepListActivity
- * 
  */
 public class ContentActivity extends AppCompatActivity {
 
@@ -49,14 +50,14 @@ public class ContentActivity extends AppCompatActivity {
     Toolbar toolbar;
 
     /**
-     *     called when LocalBroadcastManager (from MainActivity) sends something
-     *     enables getting and handling messages when this activity is the current activity
+     * called when LocalBroadcastManager (from MainActivity) sends something
+     * enables getting and handling messages when this activity is the current activity
      */
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String myoGesture = intent.getStringExtra("gesture");
-            Log.i(TAG, "Got message: " + myoGesture);
+//            Log.i(TAG, "Got message: " + myoGesture);
 
             handleGesture(context, myoGesture);
         }
@@ -66,13 +67,14 @@ public class ContentActivity extends AppCompatActivity {
      * translate the given myo gesture and reflect it in this activity
      * the app takes different actions for the same gesture depending on
      * whether the option list is open or not
+     *
      * @param context
      * @param gesture myo gesture string sent from the phone
      */
     private void handleGesture(Context context, String gesture) {
 
         // position in the video
-        int tmpPosition = videoView.getCurrentPosition();
+        int currentPosition = videoView.getCurrentPosition();
         switch (gesture) {
             case "fingers spread":   //open or close options menu
                 if (toolbar.isOverflowMenuShowing()) {
@@ -83,9 +85,8 @@ public class ContentActivity extends AppCompatActivity {
                     videoView.pause();
                     playPosition = videoView.getCurrentPosition();
                     toolbar.showOverflowMenu();
-
                 }
-
+                Log.e(TAG, "playPosition = " + playPosition);
 //                http://stackoverflow.com/questions/13615229/android-programmatically-select-menu-option
                 // http://stackoverflow.com/questions/3133318/how-to-open-the-options-menu-programmatically
                 break;
@@ -95,8 +96,12 @@ public class ContentActivity extends AppCompatActivity {
                     moveUporDown("down");
                 } else { // menu is not open
                     // rewind 5 seconds
-                    videoView.seekTo(tmpPosition - (5 * 1000));
+                    playPosition = currentPosition - (5 + 1000);
+                    if (playPosition < 0)
+                        playPosition = 0;
+                    videoView.seekTo(playPosition);
                 }
+                Log.e(TAG, "playPosition = " + playPosition);
                 break;
             case "wave in":
                 if (toolbar.isOverflowMenuShowing()) {
@@ -104,8 +109,10 @@ public class ContentActivity extends AppCompatActivity {
                     moveUporDown("up");
                 } else {
                     // fast forward 5 sec
-                    videoView.seekTo(tmpPosition + (5 * 1000));
+                    playPosition = currentPosition + (5 * 1000);
+                    videoView.seekTo(playPosition);
                 }
+                Log.e(TAG, "playPosition = " + playPosition);
                 break;
             case "fist":     // pause or resume
 
@@ -123,22 +130,19 @@ public class ContentActivity extends AppCompatActivity {
                     } else {
                         // resume video
                         // http://examples.javacodegeeks.com/android/android-videoview-example/
-                        // videoView.seekTo(playPosition);
+                        videoView.seekTo(playPosition);
                         videoView.start();
-//                        Log.i(TAG, "Resume Video");
                     }
                 }
+                Log.e(TAG, "playPosition = " + playPosition);
                 break;
         }
     }
 
 
-
-
-
-
     /**
      * play the next or prev video
+     *
      * @param nextOrPrev "next" or "prev"
      */
     private void playStep(String nextOrPrev) {
@@ -153,8 +157,7 @@ public class ContentActivity extends AppCompatActivity {
         int newStep = 0;
         if (nextOrPrev.equals("next")) {
             newStep = currentStep + 1;
-        }
-        else if (nextOrPrev.equals("prev")){
+        } else if (nextOrPrev.equals("prev")) {
 
             newStep = currentStep - 1;
             if (newStep < 1) {
@@ -169,11 +172,15 @@ public class ContentActivity extends AppCompatActivity {
         // update the variable videoFileName
         videoFileName = newFileName;
 
+        // check if it's airplane or heli and change directory
+
         // load the next video
         //TODO remove buffering
         videoView.setVideoPath("/storage/sdcard1/airplane/" + videoFileName + ".mp4");
+
         videoView.start();
 
+        toolbar.hideOverflowMenu();
     }
 
 
@@ -189,7 +196,7 @@ public class ContentActivity extends AppCompatActivity {
         // extract the filename and R.id for the video the user selected
         intent = getIntent();
         videoFileName = intent.getStringExtra(Constants.VIEDEO_FILENAME);
-        Log.i(TAG, "videoFileName = " + videoFileName );
+        Log.i(TAG, "videoFileName = " + videoFileName);
         int videoRID = intent.getIntExtra(Constants.VIDEO_RID, 0);
         String uriPath = "android.resource://" + getPackageName() + "/" + videoRID;
 
@@ -227,28 +234,28 @@ public class ContentActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-//        videoView.requestFocus();
-//        //we also set an setOnPreparedListener in order to know when the video file is ready for playback
-//        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//
-//            public void onPrepared(MediaPlayer mediaPlayer) {
-//                // close the progress bar and play the video
-////                progressDialog.dismiss();
-//                //if we have a playPosition on savedInstanceState, the video playback should start from here
-//                videoView.seekTo(playPosition);
-//                if (playPosition == 0) {
-//                    videoView.start();
-//                } else {
-//                    //if we come from a resumed activity, video playback will be paused
-//                    videoView.pause();
-//                }
-//            }
-//        });
+        videoView.requestFocus();
+
+        //we also set an setOnPreparedListener in order to know when the video file is ready for playback
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                // close the progress bar and play the video
+//                progressDialog.dismiss();
+                //if we have a playPosition on savedInstanceState, the video playback should start from here
+                videoView.seekTo(playPosition);
+                if (playPosition == 0) {
+                    videoView.start();
+                } else {
+                    //if we come from a resumed activity, video playback will be paused
+                    videoView.pause();
+                }
+            }
+        });
 
 
 // http://www.java2s.com/Code/Android/Media/UsingMediaPlayertoplayVideoandAudio.htm
-        videoView.requestFocus();
-        videoView.start();
+        // videoView.start();
 
     }
 
@@ -270,30 +277,28 @@ public class ContentActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * travel within the options menu
      * place the check mark beside the option item
+     *
      * @param upordown "up" or "down"
      */
     private void moveUporDown(String upordown) {
 
         // remove the checkmark
-         menu.getItem(menuItemPosition).setChecked(false);
+        menu.getItem(menuItemPosition).setChecked(false);
 
         // update the position in the list
         if (upordown.equals("down")) {
             menuItemPosition++;
-        }
-        else if(upordown.equals("up")) {
+        } else if (upordown.equals("up")) {
             menuItemPosition--;
         }
 
         // reset if the position is too large or too small
         if (menuItemPosition > menu.size() - 1) {
             menuItemPosition = 0;
-        }
-        else if (menuItemPosition < 0) {
+        } else if (menuItemPosition < 0) {
             menuItemPosition = menu.size() - 1;
             // item 0 is for Bluetoothtet
         }
@@ -310,7 +315,7 @@ public class ContentActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_content_activity, menu);
 
-        for (int i = 0; i < menu.size(); i ++) {
+        for (int i = 0; i < menu.size(); i++) {
             menu.getItem(i).setCheckable(true);
         }
         // check the first menu item as default
@@ -323,6 +328,7 @@ public class ContentActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.replay:
+                playPosition = 0;
                 videoView.seekTo(0);
                 videoView.start();
                 break;
@@ -331,10 +337,12 @@ public class ContentActivity extends AppCompatActivity {
                 break;
             case R.id.nextStep:
                 playStep("next");
+                playPosition = 0;
                 break;
 
             case R.id.prevStep:
                 playStep("prev");
+                playPosition = 0;
                 break;
         }
         return false;

@@ -437,7 +437,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //inputStream.close();
 
-                    Log.i(TAG, "read " + bytes + " bytes");
+//                    Log.i(TAG, "read " + bytes + " bytes");
                     // update textview
                     if (bytes > 0) {
                         pose = new String(buffer, 0, bytes);
