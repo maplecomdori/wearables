@@ -8,13 +8,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.MediaController;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 import com.example.drdc_admin.moverioapp.Constants;
@@ -44,6 +47,7 @@ public class ContentActivity extends AppCompatActivity {
     private String videoFileName;
     private static final String TAG = "ContentActivity";
 
+    TextView tv_gesture;
     VideoView videoView;
     MediaController mc;
     Intent intent;
@@ -73,6 +77,22 @@ public class ContentActivity extends AppCompatActivity {
      */
     private void handleGesture(Context context, String gesture) {
 
+        // inform the user which gesture has been recognized
+
+        tv_gesture.setText(gesture);
+        tv_gesture.setVisibility(View.VISIBLE);
+        new CountDownTimer(1000,200){
+            @Override
+            public void onTick(long millisUntilFinished){
+                // fade out image?
+            }
+            @Override
+            public void onFinish(){
+                //set the new Content of your activity
+                tv_gesture.setVisibility(View.INVISIBLE);
+            }
+        }.start();
+
         // position in the video
         int currentPosition = videoView.getCurrentPosition();
         switch (gesture) {
@@ -96,7 +116,7 @@ public class ContentActivity extends AppCompatActivity {
                     moveUporDown("down");
                 } else { // menu is not open
                     // rewind 5 seconds
-                    playPosition = currentPosition - (5 + 1000);
+                    playPosition = currentPosition - (5 * 1000);
                     if (playPosition < 0)
                         playPosition = 0;
                     videoView.seekTo(playPosition);
@@ -138,7 +158,6 @@ public class ContentActivity extends AppCompatActivity {
                 break;
         }
     }
-
 
     /**
      * play the next or prev video
@@ -189,6 +208,8 @@ public class ContentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content);
 
+        tv_gesture = (TextView) findViewById(R.id.gesture);
+
         toolbar = (Toolbar) findViewById(R.id.studyStepToolbar);
         toolbar.setTitle("Step ###");
         setSupportActionBar(toolbar);
@@ -204,9 +225,7 @@ public class ContentActivity extends AppCompatActivity {
 //        videoView.setVideoURI(Uri.parse(uriPath));
 //        videoView.requestFocus();
 
-
         mediaControls = new MediaController(ContentActivity.this);
-
 
 //        // create a progress bar while the video file is loading
 //        progressDialog = new ProgressDialog(ContentActivity.this);
