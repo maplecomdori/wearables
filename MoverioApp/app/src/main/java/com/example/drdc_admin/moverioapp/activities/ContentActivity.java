@@ -47,11 +47,12 @@ public class ContentActivity extends AppCompatActivity {
     private String videoFileName;
     private static final String TAG = "ContentActivity";
 
-    TextView tv_gesture;
-    VideoView videoView;
-    MediaController mc;
-    Intent intent;
-    Toolbar toolbar;
+    private TextView tv_gesture;
+    private VideoView videoView;
+    private MediaController mc;
+    private Intent intent;
+    private Toolbar toolbar;
+    private long timeNewGesture;
 
     /**
      * called when LocalBroadcastManager (from MainActivity) sends something
@@ -78,18 +79,24 @@ public class ContentActivity extends AppCompatActivity {
     private void handleGesture(Context context, String gesture) {
 
         // inform the user which gesture has been recognized
-
+        timeNewGesture = System.currentTimeMillis();
         tv_gesture.setText(gesture);
         tv_gesture.setVisibility(View.VISIBLE);
-        new CountDownTimer(1000,200){
+
+        new CountDownTimer(1000, 1000) {
             @Override
-            public void onTick(long millisUntilFinished){
+            public void onTick(long millisUntilFinished) {
                 // fade out image?
             }
+
             @Override
-            public void onFinish(){
-                //set the new Content of your activity
-                tv_gesture.setVisibility(View.INVISIBLE);
+            public void onFinish() {
+                // hide text if it is the last gesture within the last 1 second
+                long now = System.currentTimeMillis();
+                // hide textview if the user did not make any gesture in the last x second
+                if ((now - timeNewGesture) >= (1 * 1000)) {
+                    tv_gesture.setVisibility(View.INVISIBLE);
+                }
             }
         }.start();
 
