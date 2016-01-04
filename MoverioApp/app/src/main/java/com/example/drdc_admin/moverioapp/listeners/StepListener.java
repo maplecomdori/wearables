@@ -4,19 +4,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
+import com.example.drdc_admin.moverioapp.Constants;
 import com.example.drdc_admin.moverioapp.activities.ContentActivity;
 
 /**
  * Created by DRDC_Admin on 13/10/2015.
  */
-public class LessonListener implements View.OnClickListener {
+public class StepListener implements View.OnClickListener {
 
     private Context context;
     private int videoRID;
+    private String filename;
 
-    public LessonListener(Context ctx, int rid) {
+    public StepListener(Context ctx, int rid, String file) {
         context = ctx;
         videoRID = rid;
+        filename = file;
     }
 
     /**
@@ -27,7 +30,8 @@ public class LessonListener implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(context, ContentActivity.class);
-        intent.putExtra("RID", videoRID);
+        intent.putExtra(Constants.VIDEO_RID, videoRID);
+        intent.putExtra(Constants.VIEDEO_FILENAME, filename);
         context.startActivity(intent);
     }
 }

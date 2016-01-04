@@ -91,7 +91,6 @@ public class ContentActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                // hide text if it is the last gesture within the last 1 second
                 long now = System.currentTimeMillis();
                 // hide textview if the user did not make any gesture in the last x second
                 if ((now - timeNewGesture) >= (1 * 1000)) {
@@ -172,11 +171,11 @@ public class ContentActivity extends AppCompatActivity {
      * @param nextOrPrev "next" or "prev"
      */
     private void playStep(String nextOrPrev) {
+        Log.i(TAG, "videoFileName = " + videoFileName);
 
         // extract nondigits from the file
         int currentStep = Integer.parseInt(videoFileName.replaceAll("[^0-9]", ""));
         Log.i(TAG, "currentStep = " + currentStep);
-        Log.i(TAG, "videoFileName = " + videoFileName);
 
         // change airplanestep1 to airplanestep2
         String chars = videoFileName.replaceAll("[0-9]", "");
@@ -252,7 +251,7 @@ public class ContentActivity extends AppCompatActivity {
             // videoView.setVideoURI(Uri.parse(uriPath));
 
             // play video in the sd card
-            videoView.setVideoPath("/storage/sdcard1/airplane/airplanestep1.mp4");
+            videoView.setVideoPath("/storage/sdcard1/airplane/" + videoFileName + ".mp4");
 //            videoView.setVideoPath(Environment.getExternalStorageDirectory().getAbsolutePath() +
 //                    "airplanestep1.mp4");
         } catch (Exception e) {

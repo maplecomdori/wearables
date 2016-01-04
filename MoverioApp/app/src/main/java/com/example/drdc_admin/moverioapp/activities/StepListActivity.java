@@ -15,7 +15,7 @@ import android.widget.ListView;
 
 import com.example.drdc_admin.moverioapp.Constants;
 import com.example.drdc_admin.moverioapp.R;
-import com.example.drdc_admin.moverioapp.adapters.LessonListAdapter;
+import com.example.drdc_admin.moverioapp.adapters.StepListAdapter;
 import com.example.drdc_admin.moverioapp.classes.Lesson;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class StepListActivity extends AppCompatActivity {
 
     // tracks which item is selected in the list
     public static int listPosition = 0;
-    LessonListAdapter adapter;
+    StepListAdapter adapter;
 
     // track which menu item is selected in the options menu
     private int menuItemPosition = 0;
@@ -181,7 +181,7 @@ public class StepListActivity extends AppCompatActivity {
 
         hardcoding();
 
-        adapter = new LessonListAdapter(this, lessons);
+        adapter = new StepListAdapter(this, lessons);
 
         listview.setAdapter(adapter);
 
@@ -225,7 +225,7 @@ public class StepListActivity extends AppCompatActivity {
         lessonOne.setVideoFileName("airplanestep1");
         lessonOne.setVideoRID(R.raw.airplane_step1);
         lessonTwo.setImgRID(R.drawable.lesson_two);
-        lessonTwo.setVideoFileName("lesson2_step_3");
+        lessonTwo.setVideoFileName("airplanestep10");
         lessonTwo.setVideoRID(R.raw.tutorial);
 
         lessons = new ArrayList<Lesson>();

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.drdc_admin.moverioapp.Constants;
 import com.example.drdc_admin.moverioapp.R;
 import com.example.drdc_admin.moverioapp.adapters.CourseListAdapter;
 import com.example.drdc_admin.moverioapp.classes.Course;
@@ -102,24 +103,6 @@ public class CourseListActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
     }
 
-
-    /**
-     * manually add course contents instead of retrieving it from database
-     */
-    private void hardcoding() {
-        Course testone = new Course("Chopper", "Build a chopper");
-        Course testtwo = new Course("Airplane", "Build an airplane");
-        testone.setDrawableID(R.drawable.course_one);
-        testtwo.setDrawableID(R.drawable.course_two);
-        courses = new ArrayList<Course>();
-        courses.add(testone);
-        courses.add(testtwo);
-//        courses.add(testtwo);
-
-
-
-    }
-
     /**
      * translate the given myo gesture and reflect it in this activity
      * @param context
@@ -129,7 +112,7 @@ public class CourseListActivity extends AppCompatActivity {
         int h1 = listview.getHeight();
         int h2 = adapter.getView(position, listview, listview).getHeight();
         Log.i(TAG, "" + h1 + " " + h2);
-        listview.setSelectionFromTop(position, h1/2 - h2/2);
+        listview.setSelectionFromTop(position, h1 / 2 - h2 / 2);
         listview.setSelection(1);
 
         switch (gesture) {
@@ -150,7 +133,7 @@ public class CourseListActivity extends AppCompatActivity {
                 Log.i(TAG, "item = " + adapter.getItem(position));
                 String courseTitle = ((Course) adapter.getItem(position)).getTitle();
                 Intent i = new Intent(context, StepListActivity.class);
-                i.putExtra("title", courseTitle);
+                i.putExtra(Constants.TITLE_COURSE, courseTitle);
                 startActivity(i);
 
                 // reset position value for later
@@ -159,7 +142,20 @@ public class CourseListActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * manually add course contents instead of retrieving it from database
+     */
+    private void hardcoding() {
+        Course testone = new Course("Airplane", "Build an airplane");
+        Course testtwo = new Course("Chopper", "Build a chopper");
+        testone.setDrawableID(R.drawable.course_one);
+        testtwo.setDrawableID(R.drawable.course_two);
+        courses = new ArrayList<Course>();
+        courses.add(testone);
+        courses.add(testtwo);
+//        courses.add(testtwo);
 
+    }
 
 
 

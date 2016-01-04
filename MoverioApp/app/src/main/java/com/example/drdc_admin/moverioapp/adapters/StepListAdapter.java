@@ -13,20 +13,20 @@ import android.widget.TextView;
 import com.example.drdc_admin.moverioapp.R;
 import com.example.drdc_admin.moverioapp.activities.StepListActivity;
 import com.example.drdc_admin.moverioapp.classes.Lesson;
-import com.example.drdc_admin.moverioapp.listeners.LessonListener;
+import com.example.drdc_admin.moverioapp.listeners.StepListener;
 
 import java.util.List;
 
 /**
  * Created by DRDC_Admin on 13/10/2015.
  */
-public class LessonListAdapter extends BaseAdapter {
+public class StepListAdapter extends BaseAdapter {
 
     private Context context;
     private List<Lesson> lessonList;
     private int[] gridImageId;
 
-    public LessonListAdapter(Context ctx, List<Lesson> list) {
+    public StepListAdapter(Context ctx, List<Lesson> list) {
         lessonList = list;
         context = ctx;
     }
@@ -99,10 +99,10 @@ public class LessonListAdapter extends BaseAdapter {
 
 
         // set onClickListener for the LinearLayout containing title, image, description of the course
-        LessonListener lessonListener = new LessonListener(context, lesson.getVideoRID());
-        playImg.setOnClickListener(lessonListener);
+        StepListener stepListener = new StepListener(context, lesson.getVideoRID(), lesson.getVideoFileName());
+        playImg.setOnClickListener(stepListener);
 
-         RelativeLayout relativeLayout = (RelativeLayout) convertView.findViewById(R.id.lessonBox);
+        RelativeLayout relativeLayout = (RelativeLayout) convertView.findViewById(R.id.lessonBox);
 
 
         // if this is the selected one, change the color

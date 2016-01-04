@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
+import com.example.drdc_admin.moverioapp.Constants;
 import com.example.drdc_admin.moverioapp.activities.StepListActivity;
 
 /**
@@ -27,7 +28,7 @@ public class CourseListener implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(context, StepListActivity.class);
-        intent.putExtra("title", courseTitle);
+        intent.putExtra(Constants.TITLE_COURSE, courseTitle);
         context.startActivity(intent);
     }
 }
