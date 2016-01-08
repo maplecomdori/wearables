@@ -21,44 +21,13 @@
         android:text="Myo Status"
         android:textSize="40dp" />
 
-    <!--
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Moverio"
-            android:textSize="20dp" />
-
-        <TextView
-            android:id="@+id/moverioConnection"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="Bluetooth"
-            android:textSize="40dp" />
-
-        <TextView
-            android:id="@+id/moverioMsg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="MSG CONTENT"
-            android:textSize="40dp" />
-
-        <TextView
-            android:id="@+id/socket"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="Success / Fail"
-            android:textSize="40dp" />
-     created to learn how to put video
-        <VideoView
-            android:id="@+id/videoView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-    -->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go to Courses (temporary)"
+        android:id="@+id/bt_tmp"
+        android:layout_weight="1"
+        android:onClick="navigateToCourseListActivity"/>
 
 </LinearLayout>
 

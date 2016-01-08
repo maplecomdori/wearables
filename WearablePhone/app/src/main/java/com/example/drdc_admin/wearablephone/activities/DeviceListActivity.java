@@ -1,4 +1,4 @@
-package com.example.drdc_admin.wearablephone;
+package com.example.drdc_admin.wearablephone.activities;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -18,6 +18,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.drdc_admin.wearablephone.R;
 
 import java.util.Set;
 

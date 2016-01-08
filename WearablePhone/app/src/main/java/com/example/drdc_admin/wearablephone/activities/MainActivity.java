@@ -1,4 +1,4 @@
-package com.example.drdc_admin.wearablephone;
+package com.example.drdc_admin.wearablephone.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,10 +16,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.example.drdc_admin.wearablephone.Constants;
+import com.example.drdc_admin.wearablephone.R;
 import com.thalmic.myo.AbstractDeviceListener;
 import com.thalmic.myo.DeviceListener;
 import com.thalmic.myo.Hub;
@@ -537,4 +540,15 @@ public class MainActivity extends AppCompatActivity {
         mHandler.sendMessage(msg);
 
     }
+
+    /**
+     * start CourseListActivity when "Go to Courses" button is clicked
+     * This will be removed once login is implemented
+     * @param view
+     */
+    public void navigateToCourseListActivity(View view) {
+        Intent intent = new Intent(this, CourseListActivity.class);
+        startActivity(intent);
+    }
+
 }

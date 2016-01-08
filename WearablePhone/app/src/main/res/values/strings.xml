@@ -16,7 +16,10 @@
     <string name="unlocked">Unlocked</string>
     <string name="locked">Locked</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <string name="courseListTitle">Wave in/out and make a fist to choose a course</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_device_list">Select a Device to Connect</string>
 
@@ -43,5 +46,7 @@
     </string>
     <string name="title_activity_watch_lesson">Watch Lesson Activity</string>
     <string name="title_activity_lesson_list">Lessons</string>
+    <string name="title_activity_course_list">Available Courses</string>
+    <string name="title_activity_step_list">Steps for ABC</string>
 
 </resources>

@@ -1,12 +1,15 @@
-<!--
-        An item representing a course with its information in the list of courses page
--->
-
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/courseBox"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/list_item"
+    android:paddingBottom="@dimen/abc_dialog_list_padding_vertical_material"
+    android:paddingLeft="@dimen/abc_list_item_padding_horizontal_material"
+    android:paddingRight="@dimen/abc_list_item_padding_horizontal_material"
+    android:paddingTop="@dimen/abc_dialog_list_padding_vertical_material"
+
+    >
 
 
     <TextView
@@ -14,29 +17,39 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:text="Title"
         android:gravity="center_horizontal"
+        android:text="Title"
         android:textAllCaps="true"
-        android:textSize="25dp" />
+        android:textSize="@dimen/abc_text_size_title_material" />
 
-
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:progress="50" />
+    <!--
+            android:layout_marginBottom="@dimen/snackbar_padding_vertical"
+            -->
     <ImageView
         android:id="@+id/course_img"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
         android:layout_below="@id/course_title"
-        android:padding="1dp"
         android:scaleType="centerCrop"
         android:src="@drawable/course_two" />
 
     <TextView
         android:id="@+id/course_description"
-        android:layout_toRightOf="@id/course_img"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/course_title"
+        android:layout_marginLeft="@dimen/abc_list_item_padding_horizontal_material"
+        android:layout_toRightOf="@id/course_img"
         android:text="Description"
-        android:textSize="20dp" />
-
+        android:textSize="@dimen/abc_text_size_medium_material" />
 
 </RelativeLayout>
