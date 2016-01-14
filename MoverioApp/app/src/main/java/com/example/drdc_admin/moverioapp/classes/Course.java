@@ -1,9 +1,11 @@
 package com.example.drdc_admin.moverioapp.classes;
 
+import java.io.Serializable;
+
 /**
  * A class representing a course
  */
-public class Course {
+public class Course implements Serializable {
 
     /**
      * FIELD
@@ -56,4 +58,7 @@ public class Course {
     public void setImageFileName(String imageFileName) {
         this.imageFileName = imageFileName;
     }
+
+
 }
+

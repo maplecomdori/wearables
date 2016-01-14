@@ -30,8 +30,12 @@ import com.thalmic.myo.Myo;
 import com.thalmic.myo.Pose;
 import com.thalmic.myo.scanner.ScanActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
@@ -41,11 +45,11 @@ public class MainActivity extends AppCompatActivity {
 
     TextView tv_myoMsg;
     VideoView vv_test;
-    BluetoothAdapter mBluetoothAdapter;
-    String btMsg = "";
-    InputStream inputStream;
-    OutputStream outputStream;
-
+    static BluetoothAdapter mBluetoothAdapter;
+    String btMsg;
+    static InputStream inputStream;
+    public static OutputStream outputStream;
+    public static ObjectOutputStream oos;
 
     private static final String TAG = "MainActivity";
     private static final String NAME = "WearablePhone";
@@ -165,8 +169,18 @@ public class MainActivity extends AppCompatActivity {
                 // stay unlocked while poses are being performed, but lock after inactivity.
                 myo.unlock(Myo.UnlockType.TIMED);
             }
+
+            if (btMsg != null) {
 //            Log.i(TAG, "ONPOSE btMsg is " + btMsg);
-            sendMsgToMoverio(btMsg.getBytes());
+                JSONObject json = new JSONObject();
+                try {
+                    json.put(Constants.MYO_GESTURE, btMsg);
+                    Log.i(TAG, json.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                sendMsgToMoverio(json.toString().getBytes());
+            }
         }
     };
 
@@ -185,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "write(buffer) failed " + e);
             }
         } else {
-            Log.e(TAG, "outputStream is NULL");
+//            Log.e(TAG, "outputStream is NULL");
         }
     }
 
@@ -410,6 +424,7 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         inputStream = socket.getInputStream();
                         outputStream = socket.getOutputStream();
+                        oos = new ObjectOutputStream(outputStream);
                         // mmServerSocket.close();
 
                     } catch (IOException e) {
@@ -453,12 +468,14 @@ public class MainActivity extends AppCompatActivity {
             try {
                 tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
+                inputStream = tmpIn;
+                outputStream = tmpOut;
+                oos = new ObjectOutputStream(outputStream);
             } catch (IOException e) {
                 Log.e(TAG, "temp sockets not created", e);
             }
 
-            inputStream = tmpIn;
-            outputStream = tmpOut;
+
         }
 
         public void run() {
@@ -525,6 +542,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * pass the result of bluetooth connection to the mainthread through Handler
+     *
      * @param result true if connection succeeded, false if failed
      */
     private void toastConnectionResult(boolean result) {
@@ -544,6 +562,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * start CourseListActivity when "Go to Courses" button is clicked
      * This will be removed once login is implemented
+     *
      * @param view
      */
     public void navigateToCourseListActivity(View view) {

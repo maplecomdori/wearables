@@ -24,13 +24,13 @@
         android:textSize="40dp"
         />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Go to Courses (temporary)"
-        android:id="@+id/bt_tmp"
-        android:layout_weight="1"
-        android:onClick="navigateToCourseListActivity"/>
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Go to Courses (temporary)"-->
+        <!--android:id="@+id/bt_tmp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:onClick="navigateToCourseListActivity"/>-->
 
 
 </LinearLayout>

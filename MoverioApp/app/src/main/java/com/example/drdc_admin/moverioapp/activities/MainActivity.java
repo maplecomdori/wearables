@@ -23,6 +23,9 @@ import android.widget.Toast;
 import com.example.drdc_admin.moverioapp.Constants;
 import com.example.drdc_admin.moverioapp.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -47,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private static final UUID MY_UUID = UUID.fromString("d786565c-9d01-4fac-a40f-baa8a5eb53cb");
 
     BluetoothAdapter mBluetoothAdapter;
-    public static String pose = "";
+    public static String pose;
     InputStream inputStream;
     OutputStream outputStream;
     public TextView tv_msg;
@@ -84,10 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.e(TAG, "onCreate");
         tv_msg = (TextView) findViewById(R.id.myoMsg);
-        tv_msg.setTextColor(Color.GREEN);
-
-//        button = (Button) findViewById(R.id.bt_tmp);
-//        button.setPressed(true);
+        tv_msg.setTextColor(Color.BLUE);
 
         turnOnBluetooth();
         // Log.i(TAG, "MainActivity Thread Name = " + Thread.currentThread().getName());
@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
         mAcceptThread = new AcceptThread();
         mAcceptThread.start();
     }
-
 
 
     @Override
@@ -150,9 +149,10 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * check the result returned by startActivityForResult
+     *
      * @param requestCode
      * @param resultCode
-     * @param data contains the mac address for the device to connect to
+     * @param data        contains the mac address for the device to connect to
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -182,7 +182,8 @@ public class MainActivity extends AppCompatActivity {
         private final BluetoothSocket connectBTSocket;
         private final BluetoothDevice mmDevice;
 
-        /** Constructor
+        /**
+         * Constructor
          *
          * @param device BluetoothDevice (object) to connect to
          */
@@ -191,13 +192,13 @@ public class MainActivity extends AppCompatActivity {
             // because connectBTSocket is final
             BluetoothSocket tmp = null;
             mmDevice = device;
-            Log.i(TAG, "mmDevice is " + mmDevice.toString());
+//            Log.i(TAG, "mmDevice is " + mmDevice.toString());
 
             // Get a BluetoothSocket to connect with the given BluetoothDevice
             try {
                 // MY_UUID is the app's UUID string, also used by the server code
                 tmp = device.createRfcommSocketToServiceRecord(UUID.fromString("d786565c-9d01-4fac-a40f-baa8a5eb53cb"));
-                Log.i(TAG, "createRfcommSocket");
+//                Log.i(TAG, "createRfcommSocket");
 
             } catch (IOException e) {
 
@@ -218,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 // Connect the device through the socket. This will block
                 // until it succeeds or throws an exception
-                Log.i(TAG, "connect() in run()");
+//                Log.i(TAG, "connect() in run()");
                 connectBTSocket.connect();
             } catch (IOException connectException) {
                 // Unable to connect; close the socket and get out
@@ -256,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Cancel the thread that completed the connection
             if (mConnectThread != null) {
-                Log.i("TAG", "cancelling mConnectThread");
+//                Log.i("TAG", "cancelling mConnectThread");
                 // uncommenting the next line will give InputStream error
                 // you need the socket to be conneceted for input/outputstream to work
                 // mConnectThread.cancel();
@@ -289,6 +290,7 @@ public class MainActivity extends AppCompatActivity {
 
         /**
          * Constructor
+         *
          * @param socket socket to connect to
          */
         public ConnectedThread(BluetoothSocket socket) {
@@ -300,51 +302,30 @@ public class MainActivity extends AppCompatActivity {
             try {
                 tmpIn = connectedBTSocket.getInputStream();
                 tmpOut = connectedBTSocket.getOutputStream();
+
+                inputStream = tmpIn;
+                outputStream = tmpOut;
             } catch (IOException e) {
                 Log.e(TAG, "temp sockets not created");
             }
 
-            inputStream = tmpIn;
-            outputStream = tmpOut;
+
             // Log.i(TAG, mmInStream.toString());
         }
 
         @Override
         public void run() {
+//            Log.i(TAG, "ConnectedThread run()");
             android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-            Log.i(TAG, "ConnectedThread run()");
 
             byte[] buffer = new byte[1024];
             int bytes = 0;
 
             // Keep listening to the InputStream while connected
-            while (true) {
+            while (connectedBTSocket.isConnected()) {
+//            while (true) {
 
-                try {
-                    // Read from the InputStream
-                    bytes = inputStream.read(buffer);
-
-                    Log.i(TAG, "read " + bytes + " bytes");
-                    // update textview
-                    if (bytes > 0) {
-                        pose = new String(buffer, 0, bytes);
-                        sendGesture(pose);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                tv_msg.setText(pose);
-                            }
-                        });
-
-                        Log.i(TAG, "pose = " + pose);
-                        // Log.i(TAG, "Thread Name = " + Thread.currentThread().getName());
-
-                    }
-
-                } catch (Exception e) {
-                    Log.e(TAG, "read from InputStream failed in ConnectedThread " + e);
-                    break;
-                }
+                handleBTMsg();
 
             }
         }
@@ -360,10 +341,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     /**
      * AcceptThread listens and accepts connection request from WearablePhone
      */
     private class AcceptThread extends Thread {
+
         // socket listening to incoming connection
         private final BluetoothServerSocket mmServerSocket;
 
@@ -380,20 +363,22 @@ public class MainActivity extends AppCompatActivity {
                 //tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(NAME, MY_UUID);
                 tmp = mBluetoothAdapter.listenUsingRfcommWithServiceRecord(NAME, MY_UUID);
             } catch (IOException e) {
-                Log.e(TAG, "mmServerSocket is " + tmp, e);
+//                Log.e(TAG, "mmServerSocket is " + tmp, e);
             }
             mmServerSocket = tmp;
-            Log.i(TAG, "mmServerSocket is " + tmp);
+//            Log.i(TAG, "mmServerSocket is " + tmp);
         }
 
         // executed when the thread.start() is executed
         public void run() {
+            Log.i(TAG, "AcceptThread run()");
             android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
             // socket to the incoming connection
             BluetoothSocket socket = null;
 
-            // Keep listening until exception occurs or a socket is returned
+            // Accept an incoming socket connection
+            // Keep listening until a socket is returned or exception occurs
             while (socket == null) {
                 try {
                     socket = mmServerSocket.accept();
@@ -401,10 +386,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e(TAG, "IOException: accept() failed " + e);
                     break;
                 }
-
-//                Log.i(TAG, "END WHILE ");
             }
-
 
             // notify user
             toastConnectionResult(socket != null);
@@ -414,53 +396,25 @@ public class MainActivity extends AppCompatActivity {
                     inputStream = socket.getInputStream();
                     outputStream = socket.getOutputStream();
                     mmServerSocket.close();
+
                 } catch (IOException e) {
                     Log.e(TAG, "IO STREAM after accpet()" + e);
                     // break;
                 }
             }
 
-            // store myo gesture string in buffer
-            byte[] buffer = new byte[1024];
-            int bytes;
 
+            // Receive and handle message/course object from bluetooth connection
             while (socket != null) {
 
                 // Do work to manage the connection (in a separate thread)
                 // TODO: manageConnectedSocket(socket);
                 // Log.i(TAG, "Connection accepted");
 
-
-                try {
-                    // Read from the InputStream
-                    bytes = inputStream.read(buffer);
-
-                    //inputStream.close();
-
-//                    Log.i(TAG, "read " + bytes + " bytes");
-                    // update textview
-                    if (bytes > 0) {
-                        pose = new String(buffer, 0, bytes);
-                        sendGesture(pose);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                tv_msg.setText(pose);
-                            }
-                        });
-
-                        Log.i(TAG, "pose = " + pose);
-                        // Log.i(TAG, "Thread Name = " + Thread.currentThread().getName());
-
-                        pose = null;
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, "read from InputStream failed in AcceptThread" + e);
-                    break;
-                }
+                handleBTMsg();
             }
 
-            Log.i(TAG, "END RUN() ");
+//            Log.i(TAG, "END RUN() ");
         }
 
         /**
@@ -475,8 +429,60 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void handleBTMsg() {
+        // store myo gesture string in buffer
+        byte[] buffer = new byte[1024];
+        int bytes;
+
+        try {
+            // Read from the InputStream
+            bytes = inputStream.read(buffer);
+            //inputStream.close();
+
+//                    Log.i(TAG, "read " + bytes + " bytes");
+            // update textview
+            if (bytes > 0) {
+
+                // decode the json bytes into string and construct jsonobject
+                String jsonString = new String(buffer, 0, bytes);
+                Log.i(TAG, "jsonString = " + jsonString);
+                JSONObject json = new JSONObject(jsonString);
+
+                if (json.has(Constants.MYO_GESTURE)) {
+                    pose = json.getString(Constants.MYO_GESTURE);
+                    sendGesture(pose);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!(pose.equals("rest"))) {
+                                tv_msg.setText(pose);
+                            }
+                        }
+                    });
+
+//                Log.i(TAG, "pose = " + pose);
+//                    Log.i(TAG, "Thread Name = " + Thread.currentThread().getName());
+                } else {
+                    // start ContentActivity
+                    Log.i(TAG, "start ContentActivity");
+                    Intent intent = new Intent(this, ContentActivity.class);
+                    intent.putExtra(Constants.JSON_STRING, jsonString);
+                    startActivity(intent);
+
+                }
+
+            }
+        } catch (IOException e) {
+//            Log.e(TAG, "read from InputStream failed in handleBTMsg" + e);
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * create toast message the result of bluetooth connection attemp
+     *
      * @param result true: success, false: failure
      */
     private void toastConnectionResult(boolean result) {
@@ -498,10 +504,11 @@ public class MainActivity extends AppCompatActivity {
     /**
      * start CourseListActivity when "Go to Courses" button is clicked
      * This will be removed once login is implemented
+     *
      * @param view
      */
     public void navigateToCourseListActivity(View view) {
         Intent intent = new Intent(this, CourseListActivity.class);
-        startActivity(intent);
+//        startActivity(intent);
     }
 }

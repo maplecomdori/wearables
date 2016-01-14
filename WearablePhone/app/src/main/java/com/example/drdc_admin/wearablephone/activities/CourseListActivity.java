@@ -46,7 +46,7 @@ public class CourseListActivity extends AppCompatActivity {
     private void hardcoding() {
         Course airplanePhase1 = new Course("Airplane Phase #1", "Build an airplane");
         Course helicopterPhase1 = new Course("Chopper Phase #1", "Build a chopper");
-        Course airplanePhase2 = new Course("Airplane Phase #1", "Build an airplane");
+        Course airplanePhase2 = new Course("Airplane Phase #2", "Build an airplane");
         Course helicopterPhase2 = new Course("Chopper Phase #2", "Build a chopper");
 
         airplanePhase1.setDrawableID(R.drawable.course_one);

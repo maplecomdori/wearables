@@ -11,4 +11,6 @@ public class Constants {
     public static final String VIEDEO_FILENAME = "videoFilename";
     public static final String TITLE_STEP = "titleStep";
     public static final String TITLE_COURSE = "titleCourse";
+    public static final String MYO_GESTURE = "gesture";
+
 }

@@ -16,7 +16,7 @@ import android.widget.ListView;
 import com.example.drdc_admin.moverioapp.Constants;
 import com.example.drdc_admin.moverioapp.R;
 import com.example.drdc_admin.moverioapp.adapters.StepListAdapter;
-import com.example.drdc_admin.moverioapp.classes.Lesson;
+import com.example.drdc_admin.moverioapp.classes.Step;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class StepListActivity extends AppCompatActivity {
     private static final String TAG = "StepListActivity";
     private Menu menu;
     ListView listview;
-    List<Lesson> lessons;
+    List<Step> steps;
     List<String> listTitles;
     List<String> listDescriptions;
     int drawableID;
@@ -113,7 +113,7 @@ public class StepListActivity extends AppCompatActivity {
 
                 } else {
                     listPosition++;
-                    if (lessons.size() <= listPosition) {
+                    if (steps.size() <= listPosition) {
                         listPosition = 0;
                     }
                 }
@@ -124,7 +124,7 @@ public class StepListActivity extends AppCompatActivity {
                 } else {
                     listPosition--;
                     if (listPosition < 0) {
-                        listPosition = lessons.size() - 1;
+                        listPosition = steps.size() - 1;
                     }
 
                 }
@@ -135,14 +135,14 @@ public class StepListActivity extends AppCompatActivity {
                     onOptionsItemSelected(menu.getItem(menuItemPosition));
                 } else {
                     // Log.i(TAG, "item = " + adapter.getItem(listPosition));
-                    int videoRID = ((Lesson) adapter.getItem(listPosition)).getVideoRID();
-                    String filename = ((Lesson) adapter.getItem(listPosition)).getVideoFileName();
+                    int videoRID = ((Step) adapter.getItem(listPosition)).getVideoRID();
+                    String filename = ((Step) adapter.getItem(listPosition)).getVideoFileName();
                     Log.i(TAG, "filename = " + filename);
 
                     // put the filename and R.id of the video the user selected
                     Intent i = new Intent(context, ContentActivity.class);
                     i.putExtra(Constants.VIDEO_RID, videoRID);
-                    i.putExtra(Constants.VIEDEO_FILENAME , filename );
+                    i.putExtra(Constants.VIDEO_FILENAME, filename );
                     startActivity(i);
 
                     // reset position value for later
@@ -181,7 +181,7 @@ public class StepListActivity extends AppCompatActivity {
 
         hardcoding();
 
-        adapter = new StepListAdapter(this, lessons);
+        adapter = new StepListAdapter(this, steps);
 
         listview.setAdapter(adapter);
 
@@ -219,18 +219,16 @@ public class StepListActivity extends AppCompatActivity {
      * manually add steps instead of retrieving it from database
      */
     private void hardcoding() {
-        Lesson lessonOne = new Lesson("Step1", "Add some part");
-        Lesson lessonTwo = new Lesson("Step2", "remove some part");
-        lessonOne.setImgRID(R.drawable.lesson_one);
-        lessonOne.setVideoFileName("airplanestep1");
-        lessonOne.setVideoRID(R.raw.airplane_step1);
-        lessonTwo.setImgRID(R.drawable.lesson_two);
-        lessonTwo.setVideoFileName("airplanestep10");
-        lessonTwo.setVideoRID(R.raw.tutorial);
+        Step stepOne = new Step("Step1", "Add some part");
+        Step stepTwo = new Step("Step2", "remove some part");
+        stepOne.setImgRID(R.drawable.lesson_one);
+        stepOne.setVideoFileName("airplanestep1");
+        stepTwo.setImgRID(R.drawable.lesson_two);
+        stepTwo.setVideoFileName("airplanestep10");
 
-        lessons = new ArrayList<Lesson>();
-        lessons.add(lessonOne);
-        lessons.add(lessonTwo);
+        steps = new ArrayList<Step>();
+        steps.add(stepOne);
+        steps.add(stepTwo);
 
 
     }

@@ -8,7 +8,12 @@ public class Constants {
     public static final int MESSAGE_TOAST = 5;
     public static final String BLUETOOTH_CONNECTION_RESULT = "BT_RESULT";
     public static final String VIDEO_RID = "videoRID";
-    public static final String VIEDEO_FILENAME = "videoFilename";
+    public static final String VIDEO_FILENAME = "videoFileName";
     public static final String TITLE_STEP = "titleStep";
     public static final String TITLE_COURSE = "titleCourse";
+    public static final String VIDEO_DIRECTORY = "videoDirectory";
+    public static final String MYO_GESTURE = "gesture";
+    public static final String JSON_STRING = "jsonString";
+
+
 }

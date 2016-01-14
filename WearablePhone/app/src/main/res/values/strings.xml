@@ -17,6 +17,7 @@
     <string name="locked">Locked</string>
 
     <string name="courseListTitle">Wave in/out and make a fist to choose a course</string>
+    <string name="stepListTitle">Wave in/out and make a fist to choose a step</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -46,7 +47,8 @@
     </string>
     <string name="title_activity_watch_lesson">Watch Lesson Activity</string>
     <string name="title_activity_lesson_list">Lessons</string>
-    <string name="title_activity_course_list">Available Courses</string>
-    <string name="title_activity_step_list">Steps for ABC</string>
+    <string name="title_activity_course_list">Your Courses</string>
+    <string name="title_activity_step_list">Choose a stepC</string>
+    <string name="title_activity_content">ContentActivity</string>
 
 </resources>

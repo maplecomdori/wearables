@@ -10,4 +10,21 @@
     tools:showIn="@layout/activity_step_list"
     tools:context="com.example.drdc_admin.wearablephone.activities.StepListActivity">
 
+
+    <TextView
+        android:id="@+id/stepListInstruction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:text="@string/stepListTitle"
+        android:textSize="@dimen/abc_text_size_large_material" />
+
+    <ListView
+        android:id="@+id/stepListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/stepListInstruction"
+        android:layout_gravity="center_horizontal"
+        android:divider="#FFFFFF"
+        android:dividerHeight="20px" />
 </RelativeLayout>

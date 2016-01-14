@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.example.drdc_admin.moverioapp.R;
 import com.example.drdc_admin.moverioapp.activities.StepListActivity;
-import com.example.drdc_admin.moverioapp.classes.Lesson;
+import com.example.drdc_admin.moverioapp.classes.Step;
 import com.example.drdc_admin.moverioapp.listeners.StepListener;
 
 import java.util.List;
@@ -23,11 +23,11 @@ import java.util.List;
 public class StepListAdapter extends BaseAdapter {
 
     private Context context;
-    private List<Lesson> lessonList;
+    private List<Step> stepList;
     private int[] gridImageId;
 
-    public StepListAdapter(Context ctx, List<Lesson> list) {
-        lessonList = list;
+    public StepListAdapter(Context ctx, List<Step> list) {
+        stepList = list;
         context = ctx;
     }
 
@@ -38,7 +38,7 @@ public class StepListAdapter extends BaseAdapter {
      */
     @Override
     public int getCount() {
-        return lessonList.size();
+        return stepList.size();
     }
 
     /**
@@ -50,7 +50,7 @@ public class StepListAdapter extends BaseAdapter {
      */
     @Override
     public Object getItem(int position) {
-        return lessonList.get(position);
+        return stepList.get(position);
     }
 
     /**
@@ -61,7 +61,7 @@ public class StepListAdapter extends BaseAdapter {
      */
     @Override
     public long getItemId(int position) {
-        return lessonList.indexOf(getItem(position));
+        return stepList.indexOf(getItem(position));
     }
 
     /**
@@ -84,7 +84,7 @@ public class StepListAdapter extends BaseAdapter {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Lesson lesson = (Lesson) lessonList.get(position);
+        Step step = (Step) stepList.get(position);
         LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         convertView = mInflater.inflate(R.layout.fragment_step_list_item, null);
 
@@ -93,13 +93,13 @@ public class StepListAdapter extends BaseAdapter {
         TextView lessonDescription = (TextView) convertView.findViewById((R.id.lesson_description));
         ImageView playImg = (ImageView) convertView.findViewById(R.id.play_button);
 
-        lessonTitle.setText(lesson.getTitle());
-        lessonDescription.setText(lesson.getDescription());
-        lessonImg.setImageResource(lesson.getImgRID());
+        lessonTitle.setText(step.getTitle());
+        lessonDescription.setText(step.getDescription());
+        lessonImg.setImageResource(step.getImgRID());
 
 
         // set onClickListener for the LinearLayout containing title, image, description of the course
-        StepListener stepListener = new StepListener(context, lesson.getVideoRID(), lesson.getVideoFileName());
+        StepListener stepListener = new StepListener(context, step.getVideoRID(), step.getVideoFileName());
         playImg.setOnClickListener(stepListener);
 
         RelativeLayout relativeLayout = (RelativeLayout) convertView.findViewById(R.id.lessonBox);

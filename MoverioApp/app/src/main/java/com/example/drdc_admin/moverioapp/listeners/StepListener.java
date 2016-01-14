@@ -31,7 +31,7 @@ public class StepListener implements View.OnClickListener {
     public void onClick(View v) {
         Intent intent = new Intent(context, ContentActivity.class);
         intent.putExtra(Constants.VIDEO_RID, videoRID);
-        intent.putExtra(Constants.VIEDEO_FILENAME, filename);
+        intent.putExtra(Constants.VIDEO_FILENAME, filename);
         context.startActivity(intent);
     }
 }

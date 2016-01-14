@@ -23,6 +23,9 @@ import android.widget.VideoView;
 import com.example.drdc_admin.moverioapp.Constants;
 import com.example.drdc_admin.moverioapp.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Activity that displays study material (step / content) selected from StepListActivity
  */
@@ -78,26 +81,30 @@ public class ContentActivity extends AppCompatActivity {
      */
     private void handleGesture(Context context, String gesture) {
 
-        // inform the user which gesture has been recognized
-        timeNewGesture = System.currentTimeMillis();
-        tv_gesture.setText(gesture);
-        tv_gesture.setVisibility(View.VISIBLE);
+        // inform the user which gesture has been made except "rest"
+        if (!gesture.equals("rest")) {
 
-        new CountDownTimer(1000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                // fade out image?
-            }
+            // inform the user which gesture has been recognized
+            timeNewGesture = System.currentTimeMillis();
+            tv_gesture.setText(gesture);
+            tv_gesture.setVisibility(View.VISIBLE);
 
-            @Override
-            public void onFinish() {
-                long now = System.currentTimeMillis();
-                // hide textview if the user did not make any gesture in the last x second
-                if ((now - timeNewGesture) >= (1 * 1000)) {
-                    tv_gesture.setVisibility(View.INVISIBLE);
+            new CountDownTimer(1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    // fade out image?
                 }
-            }
-        }.start();
+
+                @Override
+                public void onFinish() {
+                    long now = System.currentTimeMillis();
+                    // hide textview if the user did not make any gesture in the last x second
+                    if ((now - timeNewGesture) >= (1 * 1000)) {
+                        tv_gesture.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }.start();
+        }
 
         // position in the video
         int currentPosition = videoView.getCurrentPosition();
@@ -222,7 +229,15 @@ public class ContentActivity extends AppCompatActivity {
 
         // extract the filename and R.id for the video the user selected
         intent = getIntent();
-        videoFileName = intent.getStringExtra(Constants.VIEDEO_FILENAME);
+        String jsonString = intent.getStringExtra(Constants.JSON_STRING);
+        try {
+            JSONObject json = new JSONObject(jsonString);
+            videoFileName = json.getString(Constants.VIDEO_FILENAME);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+//        videoFileName = intent.getStringExtra(Constants.VIDEO_FILENAME);
         Log.i(TAG, "videoFileName = " + videoFileName);
         int videoRID = intent.getIntExtra(Constants.VIDEO_RID, 0);
         String uriPath = "android.resource://" + getPackageName() + "/" + videoRID;
