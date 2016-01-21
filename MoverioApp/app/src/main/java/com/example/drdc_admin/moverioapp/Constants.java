@@ -15,5 +15,14 @@ public class Constants {
     public static final String MYO_GESTURE = "gesture";
     public static final String JSON_STRING = "jsonString";
 
+    public static final String MYO_REST = "rest";
+    public static final String MYO_FIST = "fist";
+    public static final String MYO_WAVEOUT = "wave out";
+    public static final String MYO_WAVEIN = "wave in";
+    public static final String MYO_FINGERSPEREAD = "fingers spread";
+
+
+
+
 
 }

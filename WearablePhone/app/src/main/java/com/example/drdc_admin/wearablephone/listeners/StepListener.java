@@ -65,13 +65,12 @@ public class StepListener implements View.OnClickListener {
 
 
     private void sendMsgToMoverio(byte[] buffer) {
-        Log.e(TAG, "sendMsgToMoverio");
+//        Log.e(TAG, "sendMsgToMoverio");
         if (outputStream != null) {
             try {
                 outputStream.write(buffer);
                 outputStream.flush();
-//                Log.i(TAG, "btMsg is " + btMsg);
-                // outputStream.close();
+//                 outputStream.close();
 //                btMsg = "";
 
             } catch (IOException e) {

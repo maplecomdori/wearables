@@ -1,10 +1,27 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.drdc_admin.moverioapp.fragments.stepImageFragment">
+    <!--android:background="#ffa500"-->
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <!--<TextView-->
+        <!--android:id="@+id/tv_stepImage"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/imgToVideo" />-->
+
+
+    <ImageView
+        android:id="@+id/stepImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        />
+    <!--android:background="#00BBFF" -->
+
+
+</RelativeLayout>

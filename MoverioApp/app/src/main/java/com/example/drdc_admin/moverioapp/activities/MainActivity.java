@@ -95,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
         // listen to incoming connection
         mAcceptThread = new AcceptThread();
         mAcceptThread.start();
+
+        //TODO FRAGMENT
+        // https://www.youtube.com/watch?v=aSRJynmOvFo&index=7&list=PLonJJ3BVjZW4lMlpHgL7UNQSGMERcDzHo
     }
 
 
@@ -355,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
             // Use a temporary object that is later assigned to mmServerSocket,
             // because mmServerSocket is final
             BluetoothServerSocket tmp = null;
-            Log.i(TAG, "ACCEPTTHREAD");
+//            Log.i(TAG, "ACCEPTTHREAD");
 
             // Create a new listening server socket
             try {
@@ -371,7 +374,7 @@ public class MainActivity extends AppCompatActivity {
 
         // executed when the thread.start() is executed
         public void run() {
-            Log.i(TAG, "AcceptThread run()");
+//            Log.i(TAG, "AcceptThread run()");
             android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
             // socket to the incoming connection

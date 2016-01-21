@@ -35,7 +35,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
@@ -49,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
     String btMsg;
     static InputStream inputStream;
     public static OutputStream outputStream;
-    public static ObjectOutputStream oos;
 
+    private final String myo1MacAddr ="FD:F5:7C:1F:3B:56";
     private static final String TAG = "MainActivity";
     private static final String NAME = "WearablePhone";
     private static final UUID MY_UUID = UUID.fromString("d786565c-9d01-4fac-a40f-baa8a5eb53cb");
@@ -81,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onConnect(Myo myo, long timestamp) {
             // Set the text color of the text view to cyan when a Myo connects.
+//            tv_myoMsg.setText(myo.getMacAddress());
             tv_myoMsg.setText("Myo Connected");
             tv_myoMsg.setTextColor(Color.CYAN);
 
@@ -187,11 +187,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendMsgToMoverio(byte[] buffer) {
 //        Log.e(TAG, "sendMsgToMoverio");
+
         if (outputStream != null) {
             try {
                 outputStream.write(buffer);
                 outputStream.flush();
-                Log.i(TAG, "btMsg is " + btMsg);
+//                Log.i(TAG, "btMsg is " + btMsg);
                 // outputStream.close();
                 btMsg = "";
 
@@ -216,8 +217,11 @@ public class MainActivity extends AppCompatActivity {
         // for MYO
         // First, we initialize the Hub singleton with an application identifier
         // Next, register for DeviceListener callbacks.
-        Hub hub = initiateHub();
+        final Hub hub = initiateHub();
         hub.addListener(mListener);
+        hub.attachByMacAddress(myo1MacAddr);
+//        hub.attachToAdjacentMyo();
+//        Log.i(TAG, "connected Myo = " + hub.getConnectedDevices());
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
@@ -386,7 +390,6 @@ public class MainActivity extends AppCompatActivity {
             // Use a temporary object that is later assigned to mmServerSocket,
             // because mmServerSocket is final
             BluetoothServerSocket tmp = null;
-            Log.i(TAG, "ACCEPTTHREAD");
 
             // Create a new listening server socket
             try {
@@ -424,8 +427,7 @@ public class MainActivity extends AppCompatActivity {
                     try {
                         inputStream = socket.getInputStream();
                         outputStream = socket.getOutputStream();
-                        oos = new ObjectOutputStream(outputStream);
-                        // mmServerSocket.close();
+//                         mmServerSocket.close();
 
                     } catch (IOException e) {
                         Log.e(TAG, "IOException after accpet()" + e);
@@ -470,7 +472,6 @@ public class MainActivity extends AppCompatActivity {
                 tmpOut = socket.getOutputStream();
                 inputStream = tmpIn;
                 outputStream = tmpOut;
-                oos = new ObjectOutputStream(outputStream);
             } catch (IOException e) {
                 Log.e(TAG, "temp sockets not created", e);
             }

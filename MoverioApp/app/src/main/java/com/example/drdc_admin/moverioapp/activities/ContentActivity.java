@@ -1,27 +1,25 @@
 package com.example.drdc_admin.moverioapp.activities;
 
 
-import android.app.ProgressDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.MediaController;
 import android.widget.TextView;
-import android.widget.VideoView;
 
 import com.example.drdc_admin.moverioapp.Constants;
 import com.example.drdc_admin.moverioapp.R;
+import com.example.drdc_admin.moverioapp.fragments.stepImageFragment;
+import com.example.drdc_admin.moverioapp.fragments.stepVideoFragment;
+import com.example.drdc_admin.moverioapp.interfaces.Communicator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,33 +27,24 @@ import org.json.JSONObject;
 /**
  * Activity that displays study material (step / content) selected from StepListActivity
  */
-public class ContentActivity extends AppCompatActivity {
+public class ContentActivity extends AppCompatActivity implements Communicator {
 
     private Menu menu;
-    private MediaController mediaControls;
-    private static int playPosition = 0;
     private int menuItemPosition = 0;
-    private ProgressDialog progressDialog;
-    private String path;
-    private Bundle extras;
-    private static final String MEDIA = "media";
-    private static final int LOCAL_AUDIO = 1;
-    private static final int STREAM_AUDIO = 2;
-    private static final int RESOURCES_AUDIO = 3;
-    private static final int LOCAL_VIDEO = 4;
-    private static final int STREAM_VIDEO = 5;
-    private boolean mIsVideoSizeKnown = false;
-    private boolean mIsVideoReadyToBePlayed = false;
 
-    private String videoFileName;
+    public static String currentFileName; // without extension
     private static final String TAG = "ContentActivity";
+    private static final String IMG_FRAG = "imgFragment";
+    private static final String VIDEO_FRAG = "videoFragment";
+    //    public static String filename;
+    private boolean isImageOn;
 
     private TextView tv_gesture;
-    private VideoView videoView;
-    private MediaController mc;
     private Intent intent;
     private Toolbar toolbar;
-    private long timeNewGesture;
+    private FragmentManager fManager;
+    private stepImageFragment imgFragment;
+    private stepVideoFragment videoFragment;
 
     /**
      * called when LocalBroadcastManager (from MainActivity) sends something
@@ -71,6 +60,16 @@ public class ContentActivity extends AppCompatActivity {
         }
     };
 
+    @Override
+    public void openMenu() {
+        toolbar.showOverflowMenu();
+    }
+
+    @Override
+    public void closeMenu() {
+        toolbar.hideOverflowMenu();
+    }
+
     /**
      * translate the given myo gesture and reflect it in this activity
      * the app takes different actions for the same gesture depending on
@@ -81,138 +80,36 @@ public class ContentActivity extends AppCompatActivity {
      */
     private void handleGesture(Context context, String gesture) {
 
-        // inform the user which gesture has been made except "rest"
-        if (!gesture.equals("rest")) {
+        if (toolbar.isOverflowMenuShowing()) {
 
-            // inform the user which gesture has been recognized
-            timeNewGesture = System.currentTimeMillis();
-            tv_gesture.setText(gesture);
-            tv_gesture.setVisibility(View.VISIBLE);
-
-            new CountDownTimer(1000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    // fade out image?
-                }
-
-                @Override
-                public void onFinish() {
-                    long now = System.currentTimeMillis();
-                    // hide textview if the user did not make any gesture in the last x second
-                    if ((now - timeNewGesture) >= (1 * 1000)) {
-                        tv_gesture.setVisibility(View.INVISIBLE);
-                    }
-                }
-            }.start();
-        }
-
-        // position in the video
-        int currentPosition = videoView.getCurrentPosition();
-        switch (gesture) {
-            case "fingers spread":   //open or close options menu
-                if (toolbar.isOverflowMenuShowing()) {
+            switch (gesture) {
+                case Constants.MYO_FINGERSPEREAD:
                     toolbar.hideOverflowMenu();
-                    videoView.seekTo(playPosition);
-                    videoView.start();
-                } else {
-                    videoView.pause();
-                    playPosition = videoView.getCurrentPosition();
-                    toolbar.showOverflowMenu();
-                }
-                Log.e(TAG, "playPosition = " + playPosition);
-//                http://stackoverflow.com/questions/13615229/android-programmatically-select-menu-option
-                // http://stackoverflow.com/questions/3133318/how-to-open-the-options-menu-programmatically
-                break;
-            case "wave out":
-                if (toolbar.isOverflowMenuShowing()) {
-                    // move down the option list
+                    // resume video
+                    videoFragment.resume();
+                    break;
+                case Constants.MYO_WAVEOUT:
                     moveUporDown("down");
-                } else { // menu is not open
-                    // rewind 5 seconds
-                    playPosition = currentPosition - (5 * 1000);
-                    if (playPosition < 0)
-                        playPosition = 0;
-                    videoView.seekTo(playPosition);
-                }
-                Log.e(TAG, "playPosition = " + playPosition);
-                break;
-            case "wave in":
-                if (toolbar.isOverflowMenuShowing()) {
-                    // move up the option list
+                    break;
+                case Constants.MYO_WAVEIN:
                     moveUporDown("up");
-                } else {
-                    // fast forward 5 sec
-                    playPosition = currentPosition + (5 * 1000);
-                    videoView.seekTo(playPosition);
-                }
-                Log.e(TAG, "playPosition = " + playPosition);
-                break;
-            case "fist":     // pause or resume
-
-                if (toolbar.isOverflowMenuShowing()) {
-                    // take actions
+                    break;
+                case Constants.MYO_FIST:
+                    // choose the current selections
                     onOptionsItemSelected(menu.getItem(menuItemPosition));
+                    break;
+            }
 
-                } else {
-                    if (videoView.isPlaying()) {
-                        // pause the video
-//                        Log.i(TAG, "Pause Video");
-                        videoView.pause();
-                        playPosition = videoView.getCurrentPosition();
-//                    Log.i(TAG, "playPosition = " + playPosition);
-                    } else {
-                        // resume video
-                        // http://examples.javacodegeeks.com/android/android-videoview-example/
-                        videoView.seekTo(playPosition);
-                        videoView.start();
-                    }
-                }
-                Log.e(TAG, "playPosition = " + playPosition);
-                break;
-        }
-    }
+        } else { //OverflowMenu is hidden
 
-    /**
-     * play the next or prev video
-     *
-     * @param nextOrPrev "next" or "prev"
-     */
-    private void playStep(String nextOrPrev) {
-        Log.i(TAG, "videoFileName = " + videoFileName);
+            if (isImageOn) {
+                imgFragment.handleGesture(gesture);
 
-        // extract nondigits from the file
-        int currentStep = Integer.parseInt(videoFileName.replaceAll("[^0-9]", ""));
-        Log.i(TAG, "currentStep = " + currentStep);
+            } else {
+                videoFragment.handleGesture(gesture);
 
-        // change airplanestep1 to airplanestep2
-        String chars = videoFileName.replaceAll("[0-9]", "");
-        int newStep = 0;
-        if (nextOrPrev.equals("next")) {
-            newStep = currentStep + 1;
-        } else if (nextOrPrev.equals("prev")) {
-
-            newStep = currentStep - 1;
-            if (newStep < 1) {
-                newStep = 1;
             }
         }
-        String newFileName = chars + newStep;
-        Log.i(TAG, "chars = " + chars);
-        Log.i(TAG, "newStep = " + newStep);
-        Log.i(TAG, "newFileName = " + newFileName);
-
-        // update the variable videoFileName
-        videoFileName = newFileName;
-
-        // check if it's airplane or heli and change directory
-
-        // load the next video
-        //TODO remove buffering
-        videoView.setVideoPath("/storage/sdcard1/airplane/" + videoFileName + ".mp4");
-
-        videoView.start();
-
-        toolbar.hideOverflowMenu();
     }
 
 
@@ -221,7 +118,7 @@ public class ContentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content);
 
-        tv_gesture = (TextView) findViewById(R.id.gesture);
+        tv_gesture = (TextView) findViewById(R.id.gestureOnVideo);
 
         toolbar = (Toolbar) findViewById(R.id.studyStepToolbar);
         toolbar.setTitle("Step ###");
@@ -232,70 +129,15 @@ public class ContentActivity extends AppCompatActivity {
         String jsonString = intent.getStringExtra(Constants.JSON_STRING);
         try {
             JSONObject json = new JSONObject(jsonString);
-            videoFileName = json.getString(Constants.VIDEO_FILENAME);
+            currentFileName = json.getString(Constants.VIDEO_FILENAME);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-//        videoFileName = intent.getStringExtra(Constants.VIDEO_FILENAME);
-        Log.i(TAG, "videoFileName = " + videoFileName);
-        int videoRID = intent.getIntExtra(Constants.VIDEO_RID, 0);
-        String uriPath = "android.resource://" + getPackageName() + "/" + videoRID;
+        imgFragment = stepImageFragment.newInstance(currentFileName);
+        videoFragment = stepVideoFragment.newInstance(currentFileName);
 
-        videoView = (VideoView) findViewById(R.id.videoView);
-//        videoView.setVideoURI(Uri.parse(uriPath));
-//        videoView.requestFocus();
-
-        mediaControls = new MediaController(ContentActivity.this);
-
-//        // create a progress bar while the video file is loading
-//        progressDialog = new ProgressDialog(ContentActivity.this);
-//        // set a title for the progress bar
-//        progressDialog.setTitle("Wearables");
-//        // set a message for the progress bar
-//        progressDialog.setMessage("Loading...");
-//        //set the progress bar not cancelable on users' touch
-//        progressDialog.setCancelable(false);
-//        // show the progress bar
-//        progressDialog.show();
-
-        try {
-            // set the media controller in the VideoView
-            videoView.setMediaController(mediaControls);
-            // set the uri of the video to be played in the internal storage
-            // videoView.setVideoURI(Uri.parse(uriPath));
-
-            // play video in the sd card
-            videoView.setVideoPath("/storage/sdcard1/airplane/" + videoFileName + ".mp4");
-//            videoView.setVideoPath(Environment.getExternalStorageDirectory().getAbsolutePath() +
-//                    "airplanestep1.mp4");
-        } catch (Exception e) {
-            Log.e("Error", e.getMessage());
-            e.printStackTrace();
-        }
-
-        videoView.requestFocus();
-
-        //we also set an setOnPreparedListener in order to know when the video file is ready for playback
-        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-
-            public void onPrepared(MediaPlayer mediaPlayer) {
-                // close the progress bar and play the video
-//                progressDialog.dismiss();
-                //if we have a playPosition on savedInstanceState, the video playback should start from here
-                videoView.seekTo(playPosition);
-                if (playPosition == 0) {
-                    videoView.start();
-                } else {
-                    //if we come from a resumed activity, video playback will be paused
-                    videoView.pause();
-                }
-            }
-        });
-
-
-// http://www.java2s.com/Code/Android/Media/UsingMediaPlayertoplayVideoandAudio.htm
-        // videoView.start();
+        putImgFragment();
 
     }
 
@@ -368,23 +210,107 @@ public class ContentActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.replay:
-                playPosition = 0;
-                videoView.seekTo(0);
-                videoView.start();
+                videoFragment.replay();
                 break;
             case R.id.goBack:
                 finish();
                 break;
             case R.id.nextStep:
-                playStep("next");
-                playPosition = 0;
+                goToNextStep();
+                toolbar.hideOverflowMenu();
                 break;
-
             case R.id.prevStep:
-                playStep("prev");
-                playPosition = 0;
+                goToPrevStep();
+                toolbar.hideOverflowMenu();
                 break;
         }
         return false;
+    }
+
+    @Override
+    public void putVideoFragment() {
+        videoFragment.getArguments().putString("fileNameWithoutExt", currentFileName);
+        fManager = getFragmentManager();
+        FragmentTransaction transaction = fManager.beginTransaction();
+        transaction.replace(R.id.contentActivity, videoFragment, VIDEO_FRAG);
+        transaction.commit();
+        isImageOn = false;
+    }
+
+    @Override
+    public void putImgFragment() {
+//        Log.i(TAG, imgFragment.getArguments().getString("fileNameWithoutExt"));
+        imgFragment.getArguments().putString("fileNameWithoutExt", currentFileName);
+//        Log.i(TAG, imgFragment.getArguments().getString("fileNameWithoutExt"));
+        fManager = getFragmentManager();
+        FragmentTransaction transaction = fManager.beginTransaction();
+        transaction.replace(R.id.contentActivity, imgFragment, IMG_FRAG);
+        transaction.commit();
+        isImageOn = true;
+
+    }
+
+    public void goToNextStep() {
+//        Log.i(TAG, "currentFileName = " + currentFileName);
+
+        // extract nondigits from the file
+        int currentStepNum = Integer.parseInt(currentFileName.replaceAll("[^0-9]", ""));
+//        Log.i(TAG, "currentStepNum = " + currentStepNum);
+
+        // change "airplanestep01" to "airplanestep02"
+        String chars = currentFileName.replaceAll("[0-9]", "");
+        int newStep = currentStepNum + 1;
+
+        // TODO check if newStep > total num of steps
+
+        String newFileName;
+        if (newStep < 10) {
+            newFileName = chars + 0 + newStep;
+        } else {
+            newFileName = chars + newStep;
+        }
+
+        // update the variable currentFileName
+        currentFileName = newFileName;
+
+        if (isImageOn) {
+            imgFragment.setImage(currentFileName);
+            imgFragment.getArguments().putString("fileNameWithoutExt", currentFileName);
+        } else { //video is on
+            putImgFragment();
+        }
+    }
+
+    public void goToPrevStep() {
+//        Log.i(TAG, "currentFileName = " + currentFileName);
+
+        // extract nondigits from the file
+        int currentStepNum = Integer.parseInt(currentFileName.replaceAll("[^0-9]", ""));
+//        Log.i(TAG, "currentStepNum = " + currentStepNum);
+
+        // change "airplanestep01" to "airplanestep02"
+        String chars = currentFileName.replaceAll("[0-9]", "");
+        int newStep = currentStepNum - 1;
+        if (newStep < 1) {
+            newStep = 1;
+        }
+
+        String newFileName;
+        if (newStep < 10) {
+            newFileName = chars + 0 + newStep;
+        } else {
+            newFileName = chars + newStep;
+
+        }
+        // update the variable currentFileName
+        currentFileName = newFileName;
+        if (isImageOn) {
+            imgFragment.setImage(currentFileName);
+            imgFragment.getArguments().putString("fileNameWithoutExt", currentFileName);
+        } else { //video is on
+            putImgFragment();
+        }
+
+
     }
 }

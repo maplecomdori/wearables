@@ -24,9 +24,9 @@
 
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_course_list">Available Courses</string>
     <string name="title_activity_lesson_list">Available Lessons</string>
-    <string name="title_activity_study_lesson">Study Lesson Activity</string>
+    <sstring name="title_activity_study_lesson">Study Lesson Activity</sstring>
+    <string name="dialogueMsg">Make fist to switch to video and finger-spread to open the menu option </string>
 
 </resources>
