@@ -9,12 +9,7 @@
         app:showAsAction="collapseActionView"
         />
 
-    <item
-        android:id="@+id/goBack"
-        android:title="Go Back to Step List"
-        app:showAsAction="collapseActionView"
 
-        />
     <item
         android:id="@+id/nextStep"
         android:title="Next Step"
@@ -29,12 +24,7 @@
 
         />
 
-    <item
-        android:id="@+id/goToCourseList"
-        android:title="Go to Course List"
-        app:showAsAction="collapseActionView"
 
-        />
     <!--
     <item
         android:id="@+id/test"

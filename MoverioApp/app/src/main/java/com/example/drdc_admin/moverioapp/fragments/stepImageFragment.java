@@ -1,10 +1,11 @@
 package com.example.drdc_admin.moverioapp.fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,14 +64,44 @@ public class stepImageFragment extends Fragment {
 
         imgView = (ImageView) getActivity().findViewById(R.id.stepImage);
         setImage(fileName);
+
+
     }
 
     public void setImage(String imgFileNameWithoutExt) {
-        String uriPath = "/storage/sdcard1/airplane/" + imgFileNameWithoutExt + ".png";
+        String uriPath = Constants.sdCardDirectory + imgFileNameWithoutExt + ".png";
         imgView.setImageURI(Uri.parse(uriPath));
 
     }
 
+    private void alert(String msg) {
+        // alert the user to make a fist to go to
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//        builder.setMessage(R.string.dialogueMsg);
+        builder.setMessage(msg);
+        builder.setTitle("Welcome");
+//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialog, int id) {
+//                // User clicked OK button
+//            }
+//        });
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+        new CountDownTimer(2000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // do nothing
+            }
+
+            @Override
+            public void onFinish() {
+                alertDialog.dismiss();
+            }
+        }.start();
+        // dismiss after some time
+
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,16 +109,16 @@ public class stepImageFragment extends Fragment {
         if (getArguments() != null) {
             fileName = getArguments().getString(fileNameArg);
         }
-        Log.e(TAG, "onCreate currentFileName = " + fileName);
+//        Log.e(TAG, "onCreate currentFileName = " + fileName);
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        String uriPath = "/storage/sdcard1/airplane/" + fileName + ".png";
+        String uriPath = Constants.sdCardDirectory + fileName + ".png";
         imgView.setImageURI(Uri.parse(uriPath));
-        Log.e(TAG, "onResume currentFileName = " + fileName);
+//        Log.e(TAG, "onResume currentFileName = " + fileName);
 
     }
 
@@ -140,12 +171,19 @@ public class stepImageFragment extends Fragment {
 
 
     public void handleGesture(String gesture) {
-        if (gesture.equals(Constants.MYO_FIST)) {
-            Communicator communicator = (Communicator) getActivity();
-            communicator.putVideoFragment();
-            Log.e(TAG, "iFrag handleGesture currentFileName = " + fileName);
+        Communicator communicator = (Communicator) getActivity();
+//            Log.e(TAG, "iFrag handleGesture currentFileName = " + fileName);
+
+        switch (gesture) {
+            case Constants.MYO_FINGERSPEREAD:
+                communicator.openMenu();
+                break;
+            case Constants.MYO_FIST:
+                communicator.putVideoFragment();
+                break;
+
         }
+
+
     }
-
-
 }

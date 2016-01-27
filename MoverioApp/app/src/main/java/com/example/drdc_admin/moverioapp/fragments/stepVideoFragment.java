@@ -29,6 +29,7 @@ public class stepVideoFragment extends Fragment {
     private TextView tv_gesture;
     private int skipSeconds = 5;
     long timeNewGesture;
+
     public stepVideoFragment() {
         // Required empty public constructor
     }
@@ -39,9 +40,13 @@ public class stepVideoFragment extends Fragment {
 
         switch (gesture) {
             case Constants.MYO_FINGERSPEREAD:
-                videoView.pause();
-                Communicator comm = (Communicator) getActivity();
-                comm.openMenu();
+                if (videoView.isPlaying()) {
+                    videoView.pause();
+                    Communicator comm = (Communicator) getActivity();
+                    comm.openMenu();
+                } else {
+                    resume();
+                }
 
                 break;
             case Constants.MYO_FIST:
@@ -140,7 +145,7 @@ public class stepVideoFragment extends Fragment {
 
 //        Log.i(TAG, "playFile() playPosition = " + playPosition);
 
-        String path = "/storage/sdcard1/airplane/" + fileNameWithoutExt + ".mp4";
+        String path = Constants.sdCardDirectory + fileNameWithoutExt + ".mp4";
         videoView.setVideoPath(path);
         videoView.seekTo(playPosition);
         videoView.start();

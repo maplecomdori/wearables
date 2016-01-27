@@ -14,7 +14,6 @@ public class Course implements Serializable {
      */
     private String title;
     private String description;
-    private String imageFileName;
     private int drawableID;
 
     public int getDrawableID() {
@@ -51,13 +50,6 @@ public class Course implements Serializable {
         this.description = description;
     }
 
-    public String getImageFileName() {
-        return imageFileName;
-    }
-
-    public void setImageFileName(String imageFileName) {
-        this.imageFileName = imageFileName;
-    }
 
 
 }

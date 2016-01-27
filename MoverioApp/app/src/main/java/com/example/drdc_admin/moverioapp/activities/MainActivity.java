@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +60,15 @@ public class MainActivity extends AppCompatActivity {
 
     private ConnectThread mConnectThread;
     private ConnectedThread mConnectedThread;
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mAcceptThread.cancel();
+        mConnectedThread.cancel();
+        mConnectThread.cancel();
+    }
+
     private AcceptThread mAcceptThread;
 
     /*
@@ -98,6 +108,13 @@ public class MainActivity extends AppCompatActivity {
 
         //TODO FRAGMENT
         // https://www.youtube.com/watch?v=aSRJynmOvFo&index=7&list=PLonJJ3BVjZW4lMlpHgL7UNQSGMERcDzHo
+
+        // test turn off screen
+        // #1
+        WindowManager.LayoutParams params = getWindow().getAttributes();
+        params.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+        params.screenBrightness = 0.1f;
+        getWindow().setAttributes(params);
     }
 
 
@@ -255,8 +272,8 @@ public class MainActivity extends AppCompatActivity {
         private void connect() {
 
 
-            ConnectedThread connectedThread = new ConnectedThread(connectBTSocket);
-            connectedThread.start();
+            mConnectedThread = new ConnectedThread(connectBTSocket);
+            mConnectedThread.start();
 
             // Cancel the thread that completed the connection
             if (mConnectThread != null) {
@@ -467,7 +484,7 @@ public class MainActivity extends AppCompatActivity {
 //                    Log.i(TAG, "Thread Name = " + Thread.currentThread().getName());
                 } else {
                     // start ContentActivity
-                    Log.i(TAG, "start ContentActivity");
+//                    Log.i(TAG, "start ContentActivity");
                     Intent intent = new Intent(this, ContentActivity.class);
                     intent.putExtra(Constants.JSON_STRING, jsonString);
                     startActivity(intent);
