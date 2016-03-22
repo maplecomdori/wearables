@@ -3,12 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ContentActivity">
 
-    <item
-        android:id="@+id/replay"
-        android:title="Replay"
-        app:showAsAction="collapseActionView"
-        />
-
 
     <item
         android:id="@+id/nextStep"
@@ -24,7 +18,10 @@
 
         />
 
-
+    <item
+        android:id="@+id/replay"
+        android:title="Replay"
+        app:showAsAction="collapseActionView" />
     <!--
     <item
         android:id="@+id/test"

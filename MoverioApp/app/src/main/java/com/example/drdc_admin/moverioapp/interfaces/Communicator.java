@@ -11,6 +11,10 @@ public interface Communicator {
 
     public void openMenu();
     public void closeMenu();
+    public void handleGesture(String gesture);
+    public void handleFingersSpread();
+    public void moveUporDown(String upordown);
+
 
 //    public void playNextVideo();
 //    public void playPrevVideo();

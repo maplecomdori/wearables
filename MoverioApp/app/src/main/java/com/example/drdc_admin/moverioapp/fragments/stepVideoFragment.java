@@ -4,7 +4,9 @@ package com.example.drdc_admin.moverioapp.fragments;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.MediaController;
@@ -13,6 +15,7 @@ import android.widget.VideoView;
 
 import com.example.drdc_admin.moverioapp.Constants;
 import com.example.drdc_admin.moverioapp.R;
+import com.example.drdc_admin.moverioapp.activities.ContentActivity;
 import com.example.drdc_admin.moverioapp.interfaces.Communicator;
 
 /**
@@ -29,6 +32,7 @@ public class stepVideoFragment extends Fragment {
     private TextView tv_gesture;
     private int skipSeconds = 5;
     long timeNewGesture;
+    private Communicator comm;
 
     public stepVideoFragment() {
         // Required empty public constructor
@@ -40,14 +44,14 @@ public class stepVideoFragment extends Fragment {
 
         switch (gesture) {
             case Constants.MYO_FINGERSPEREAD:
+                comm.handleFingersSpread();
                 if (videoView.isPlaying()) {
                     videoView.pause();
-                    Communicator comm = (Communicator) getActivity();
-                    comm.openMenu();
-                } else {
-                    resume();
-                }
 
+                } else {
+                    Log.i(TAG, "CLOSE MENU AND REPLAY");
+                    play();
+                }
                 break;
             case Constants.MYO_FIST:
                 if (videoView.isPlaying()) {
@@ -56,7 +60,6 @@ public class stepVideoFragment extends Fragment {
                     play();
                 }
                 break;
-
             case Constants.MYO_WAVEIN:
                 playPosition = playPosition - (skipSeconds * 1000);
                 play();
@@ -65,8 +68,6 @@ public class stepVideoFragment extends Fragment {
                 playPosition = playPosition + (skipSeconds * 1000);
                 play();
                 break;
-
-
         }
 
         // inform the user which gesture has been made except "rest"
@@ -122,9 +123,18 @@ public class stepVideoFragment extends Fragment {
 
         videoView = (VideoView) getActivity().findViewById(R.id.videoView);
         videoView.setMediaController(mediaControls);
+        playPosition = 0;
+        comm = (Communicator) getActivity();
+
 
         // TODO overall text instruction
         playFile(fileName);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -137,22 +147,21 @@ public class stepVideoFragment extends Fragment {
     public void play() {
 //        Log.i(TAG, "play() playPosition = " + playPosition);
 
-        videoView.seekTo(playPosition);
-        videoView.start();
+            videoView.seekTo(playPosition);
+            videoView.start();
+
     }
 
     public void playFile(String fileNameWithoutExt) {
 
 //        Log.i(TAG, "playFile() playPosition = " + playPosition);
 
-        String path = Constants.sdCardDirectory + fileNameWithoutExt + ".mp4";
+//        String path = Constants.sdCardDirectory + fileNameWithoutExt + ".mp4";
+        String path = ContentActivity.pathToContentFolder + fileNameWithoutExt + ".mp4";
+        Log.i(TAG, "path = " + path);
         videoView.setVideoPath(path);
         videoView.seekTo(playPosition);
         videoView.start();
-    }
-
-    public void resume() {
-        play();
     }
 
     public void replay() {
@@ -182,7 +191,6 @@ public class stepVideoFragment extends Fragment {
             newFileName = chars + 0 + newStep;
         } else {
             newFileName = chars + newStep;
-
         }
 
         // update the variable currentFileName

@@ -1,10 +1,12 @@
 package com.example.drdc_admin.moverioapp.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -106,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
         mAcceptThread = new AcceptThread();
         mAcceptThread.start();
 
+        // WELCOME POP UP INTRO MESSAGE
+        welcomeMsg();
+
         //TODO FRAGMENT
         // https://www.youtube.com/watch?v=aSRJynmOvFo&index=7&list=PLonJJ3BVjZW4lMlpHgL7UNQSGMERcDzHo
 
@@ -115,8 +120,25 @@ public class MainActivity extends AppCompatActivity {
         params.flags |= WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
         params.screenBrightness = 0.1f;
         getWindow().setAttributes(params);
+
+        params.screenBrightness = 0.5f;
+        getWindow().setAttributes(params);
     }
 
+    private void welcomeMsg() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(Constants.MSG_INTRO);
+        builder.setTitle("Introduction");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

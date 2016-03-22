@@ -3,25 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.drdc_admin.moverioapp.fragments.stepImageFragment">
+
     <!--android:background="#ffa500"-->
 
     <!-- TODO: Update blank fragment layout -->
 
-    <!--<TextView-->
-        <!--android:id="@+id/tv_stepImage"-->
-        <!--android:layout_alignParentTop="true"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/imgToVideo" />-->
-
-
-    <ImageView
-        android:id="@+id/stepImage"
+    <LinearLayout
+        android:id="@+id/wrapper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        />
-    <!--android:background="#00BBFF" -->
+        android:weightSum="1.0">
+
+        <ImageView
+            android:id="@+id/iv_stepImage"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:layout_weight=".80" />
+        <!--android:background="#00bfff"-->
+
+        <TextView
+            android:id="@+id/tv_stepImage"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight=".20"
+            android:text="ERROR LOADING THE TEXT FILE"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        <!--android:background="#00ff00"-->
 
 
+    </LinearLayout>
 </RelativeLayout>

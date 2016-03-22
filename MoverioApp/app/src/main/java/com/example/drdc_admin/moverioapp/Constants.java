@@ -14,6 +14,12 @@ public class Constants {
     public static final String VIDEO_DIRECTORY = "videoDirectory";
     public static final String MYO_GESTURE = "gesture";
     public static final String JSON_STRING = "jsonString";
+    public static final String UPMENU = "up";
+    public static final String DOWNMENU = "down";
+
+    public static final String MSG_INTRO = "Please connect to the phone over Bluetooth " +
+            "and make your selection on the phone to see the contents here. " +
+            "Use the trackpad to click the OK button";
 
     // MYO GESTURES
     public static final String MYO_REST = "rest";
@@ -22,13 +28,20 @@ public class Constants {
     public static final String MYO_WAVEIN = "wave in";
     public static final String MYO_FINGERSPEREAD = "fingers spread";
 
-    // S4 DIRECTORY
-    public static final String DIRECTORY_PHASE1 = "/storage/sdcard1/airplane/phase1";
-    public static final String DIRECTORY_PHASE2 = "/storage/sdcard1/airplane/phase2";
-    public static final String sdCardDirectory = "/storage/sdcard1/airplane/"; //S4
+    // DIFFERENT SDCARD PATH FOR DIFFERENT DEVICES
+    public static final String DIRECTORY_AIRPLANE_PHASE1 = "";
+    public static final String DIRECTORY_AIRPLANE_PHASE2 = "";
+    public static final String DIRECTORY_HELICOPTOR_PHASE1 = "";
+    public static final String DIRECTORY_HELICOPTOR_PHASE2 = "";
 
 
 
+//    public static final String sdCardDirectory = "/storage/sdcard1/airplane/"; //S4 rooted
+    public static final String sdCardDirectory = "/storage/extSdCard/airplane/"; //S4 unrooted
+    public static final String pathToAirplane = "/root/sdcard/airplane/";
+
+    // the main storage for moverio is /mnt/sdcard
+//    public static final String sdCardDirectory = "/mnt/sdcard/airplane/"; //MOVERIO
 
 
 }

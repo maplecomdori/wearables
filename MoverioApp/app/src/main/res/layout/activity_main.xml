@@ -9,28 +9,50 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:layout_weight="1"
-        android:text="Message from the Phone"
-        android:textSize="20dp"
-        />
+        android:text="Myo Gesture Sent from the Phone"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="20dp" />
 
 
     <TextView
         android:id="@+id/myoMsg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:layout_marginLeft="20dp"
-        android:text="MSG CONTENT"
-        android:textSize="40dp"
-        />
+        android:text="MYO GESTURE"
+        android:textSize="40dp" />
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/myoMsg"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:text="Please make a selection in the phone. Then you will be automatically taken to the contents such as images and videos,"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/experimentIntro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:gravity="center"
+        android:text="@string/overview"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
 
     <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Go to Courses (temporary)"-->
-        <!--android:id="@+id/bt_tmp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:onClick="navigateToCourseListActivity"/>-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Go to Courses (temporary)"-->
+    <!--android:id="@+id/bt_tmp"-->
+    <!--android:layout_weight="1"-->
+    <!--android:onClick="navigateToCourseListActivity"/>-->
 
 
 </LinearLayout>

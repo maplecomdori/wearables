@@ -6,14 +6,23 @@ import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.drdc_admin.moverioapp.Constants;
 import com.example.drdc_admin.moverioapp.R;
+import com.example.drdc_admin.moverioapp.activities.ContentActivity;
 import com.example.drdc_admin.moverioapp.interfaces.Communicator;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +43,7 @@ public class stepImageFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private ImageView imgView;
+    private TextView textView;
     private String fileName;
 
     private OnFragmentInteractionListener mListener;
@@ -62,17 +72,46 @@ public class stepImageFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        imgView = (ImageView) getActivity().findViewById(R.id.stepImage);
+        imgView = (ImageView) getActivity().findViewById(R.id.iv_stepImage);
+        textView = (TextView) getActivity().findViewById(R.id.tv_stepImage);
         setImage(fileName);
-
+        setText(fileName);
 
     }
 
+
+
     public void setImage(String imgFileNameWithoutExt) {
-        String uriPath = Constants.sdCardDirectory + imgFileNameWithoutExt + ".png";
+//        String uriPath = Constants.sdCardDirectory + imgFileNameWithoutExt + ".png";
+        String uriPath = ContentActivity.pathToContentFolder + imgFileNameWithoutExt + ".png";
         imgView.setImageURI(Uri.parse(uriPath));
 
     }
+
+    public void setText(String imgFileNameWithoutExt) {
+
+        // read the text file containing instruction for the current step
+        try {
+            String instruction = null;
+//            FileReader fileReader = new FileReader(Constants.sdCardDirectory + imgFileNameWithoutExt + ".txt");
+            FileReader fileReader = new FileReader(ContentActivity.pathToContentFolder + imgFileNameWithoutExt + ".txt");
+
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+            instruction = bufferedReader.readLine();
+            Log.i(TAG, "Instruction = " + instruction);
+            textView.setText(instruction);
+
+            bufferedReader.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     private void alert(String msg) {
         // alert the user to make a fist to go to
@@ -116,8 +155,14 @@ public class stepImageFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        String uriPath = Constants.sdCardDirectory + fileName + ".png";
-        imgView.setImageURI(Uri.parse(uriPath));
+
+
+//        String uriPath = Constants.sdCardDirectory + fileName + ".png";
+//        String uriPath = ContentActivity.pathToContentFolder + fileName + ".png";
+//        imgView.setImageURI(Uri.parse(uriPath));
+
+        setImage(fileName);
+
 //        Log.e(TAG, "onResume currentFileName = " + fileName);
 
     }
@@ -170,18 +215,34 @@ public class stepImageFragment extends Fragment {
     }
 
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
     public void handleGesture(String gesture) {
         Communicator communicator = (Communicator) getActivity();
 //            Log.e(TAG, "iFrag handleGesture currentFileName = " + fileName);
 
         switch (gesture) {
             case Constants.MYO_FINGERSPEREAD:
-                communicator.openMenu();
+
+//                communicator.openMenu();
+                communicator.handleFingersSpread();
+//                communicator.handleGesture(gesture);
                 break;
             case Constants.MYO_FIST:
+                communicator.closeMenu();
                 communicator.putVideoFragment();
                 break;
-
+            case Constants.MYO_WAVEOUT:
+//                Log.e(TAG, "MYO_WAVEOUT in imgFrag");
+                // nothing to do
+                break;
+            case Constants.MYO_WAVEIN:
+//                Log.e(TAG, "MYO_WAVEIN in imgFrag");
+                // nothing to do
+                break;
         }
 
 
