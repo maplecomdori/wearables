@@ -3,8 +3,8 @@
 
     <string name="action_settings">Settings</string>
 
+    <!-- MYO STRINGS-->
     <string name="hello_world">Hello world!</string>
-
     <string name="scan">Scan</string>
     <string name="pose_fist">Fist</string>
     <string name="pose_wavein">Wave In</string>
@@ -16,14 +16,41 @@
     <string name="unlocked">Unlocked</string>
     <string name="locked">Locked</string>
 
-    <string name="courseListTitle">Wave in/out and make a fist to choose a course</string>
-    <string name="stepListTitle">Wave in/out and make a fist to choose a step</string>
+    <!-- PHASES TITLE-->
+    <string name="airplanePhase1Title">Airplane Phase #1</string>
+    <string name="airplanePhase2Title">Airplane Phase #2</string>
+    <string name="helicopterPhase1Title">Helicopter Phase #1</string>
+    <string name="helicopterPhase2Title">Helicopter Phase #2</string>
+
+    <!-- PHASES DESCRIPTION-->
+    <string name="airplanePhase1Description">Complete the first 19 Steps</string>
+    <string name="airplanePhase2Description">Complete the last 15 Steps</string>
+    <string name="helicopterPhase1Description">First X Steps</string>
+    <string name="helicopterPhase2Description">First N-X Steps</string>
+
+    <!-- PHASES POPUP MESSAGE-->
+    <string name="airplanePhase1_popup">This phase includes the first 19 steps.
+        \n\nStep #7 and #8 can be very challenging.
+        \n\nStep #7 has a lot of components to assemble in the right order.
+        \n\nStep #8 can take a while since you have to put a bolt in a very tiny space.</string>
+    <string name="airplanePhase2_popup">This phase has 15 steps.
+            \n\nStep #20, #24, and #27 are the most challenging steps in this phase as you have to work in a very tiny space.
+            \n\nClosely follow the techniques used in the video.</string>
+
+    <string name="hello_blank_fragment">blank fragment</string>
+
+    <!-- GENERAL MESSAGES -->
+    <string name="choose_course">Tap to choose a course</string>
+    <string name="choose_step">Tap to choose a step</string>
+    <string name="overview">The purpose of this experiment is to determine the usability
+        of wearable devices for military training and education. You get smart glasses,
+        a smartphone, and a smart armband for the experiment. You will receive instructions
+        on the smart glasses and make hand gestures to navigate the content on the smart glasses.</string>
+    <string name="course_intro">Meccano is more time-consuming and frustrating than you think. Use the two tools when working in tiny space as demonstrated in the tutorial.</string>
 
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Strings related to Bluetooth connection -->
     <string name="title_activity_device_list">Select a Device to Connect</string>
-
     <string name="scanning">scanning for devices...</string>
     <string name="select_device">select a device to connect</string>
     <string name="none_paired">No devices have been paired</string>
@@ -33,22 +60,12 @@
     <string name="button_scan">Scan for devices</string>
     <string name="title_activity_login">Sign in</string>
 
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
+
+    <!-- Strings related to ???-->
     <string name="title_activity_watch_lesson">Watch Lesson Activity</string>
     <string name="title_activity_lesson_list">Lessons</string>
     <string name="title_activity_course_list">Your Courses</string>
-    <string name="title_activity_step_list">Choose a stepC</string>
-    <string name="title_activity_content">ContentActivity</string>
+    <string name="title_activity_step_list">Choose a step</string>
+    <string name="title_activity_tutorial">Meccano Tutorial</string>
 
 </resources>

@@ -2,6 +2,8 @@ package com.example.drdc_admin.wearablephone.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,15 +53,21 @@ public class StepListAdapter extends BaseAdapter {
 
         ImageView lessonImg = (ImageView) convertView.findViewById(R.id.lesson_img);
         TextView lessonTitle = (TextView) convertView.findViewById((R.id.lesson_title));
-        TextView lessonDescription = (TextView) convertView.findViewById((R.id.lesson_description));
+//        TextView lessonDescription = (TextView) convertView.findViewById((R.id.lesson_description));
         ImageView playImg = (ImageView) convertView.findViewById(R.id.play_button);
 
         lessonTitle.setText(step.getTitle());
-        lessonDescription.setText(step.getDescription());
-        lessonImg.setImageResource(step.getImgRID());
+//        lessonDescription.setText(step.getDescription());
+
+        String pathToStorage = Environment.getExternalStorageDirectory().getAbsolutePath() + "/airplane/";
+
+        lessonImg.setImageURI(Uri.parse(pathToStorage + step.getFileName() + ".png"));
+
+
+//        lessonImg.setImageResource(step.getImgRID());
 
         // set onClickListener for the LinearLayout containing title, image, description of the course
-        StepListener stepListener = new StepListener(context, step.getVideoRID(), step.getVideoFileName());
+        StepListener stepListener = new StepListener(context, step.getFileName());
         playImg.setOnClickListener(stepListener);
 
         RelativeLayout relativeLayout = (RelativeLayout) convertView.findViewById(R.id.lessonBox);

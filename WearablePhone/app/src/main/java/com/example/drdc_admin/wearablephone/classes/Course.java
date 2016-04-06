@@ -3,19 +3,41 @@ package com.example.drdc_admin.wearablephone.classes;
 import java.io.Serializable;
 
 /**
- * A class representing a course
+ * A class representing a course (phase)
  */
 public class Course implements Serializable {
 
     /**
-     * FIELD
+     * FIELDs
      * title and description of the course
      * drawableID refers to the R.drawable.[imagename]
      */
     private String title;
     private String description;
-    private String imageFileName;
+    private int endOfPhase; // 19 for airplane
     private int drawableID;
+    private int numSteps;
+
+
+
+    public int getEndOfPhase() {
+        return endOfPhase;
+    }
+
+    public void setEndOfPhase(int endOfPhase) {
+        this.endOfPhase = endOfPhase;
+    }
+
+
+
+    public int getNumSteps() {
+        return numSteps;
+    }
+
+    public void setNumSteps(int numSteps) {
+        this.numSteps = numSteps;
+    }
+
 
     public int getDrawableID() {
         return drawableID;
@@ -51,13 +73,6 @@ public class Course implements Serializable {
         this.description = description;
     }
 
-    public String getImageFileName() {
-        return imageFileName;
-    }
-
-    public void setImageFileName(String imageFileName) {
-        this.imageFileName = imageFileName;
-    }
 
 
 }

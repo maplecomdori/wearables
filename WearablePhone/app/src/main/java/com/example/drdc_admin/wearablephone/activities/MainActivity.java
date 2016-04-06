@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
                 JSONObject json = new JSONObject();
                 try {
                     json.put(Constants.MYO_GESTURE, btMsg);
-                    Log.i(TAG, json.toString());
+//                    Log.i(TAG, "json = " + json.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -186,14 +186,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void sendMsgToMoverio(byte[] buffer) {
-//        Log.e(TAG, "sendMsgToMoverio");
+        Log.e(TAG, "sendMsgToMoverio");
 
         if (outputStream != null) {
             try {
                 outputStream.write(buffer);
-                outputStream.flush();
-//                Log.i(TAG, "btMsg is " + btMsg);
-                // outputStream.close();
+//                outputStream.flush();
+                Log.i(TAG, "btMsg is " + btMsg);
+//                 outputStream.close();
                 btMsg = "";
 
             } catch (IOException e) {
@@ -230,8 +230,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // server
-        mAcceptThread = new AcceptThread();
-        mAcceptThread.start();
+        if (mAcceptThread == null) {
+            mAcceptThread = new AcceptThread();
+            mAcceptThread.start();
+        }
+
+        Log.i(TAG, "mAcceptThread Name= " + mAcceptThread.getName());
+        Log.i(TAG, "mAcceptThread id= " + mAcceptThread.getId());
+
+        // OVERALL INTRO
     }
 
 
@@ -249,8 +256,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.e(TAG, "onDestroy");
         // TODO stop acceptThread
         // make acceptThread a global variable
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -568,6 +581,11 @@ public class MainActivity extends AppCompatActivity {
      */
     public void navigateToCourseListActivity(View view) {
         Intent intent = new Intent(this, CourseListActivity.class);
+        startActivity(intent);
+    }
+
+    public void navigateToTutorialListActivity(View view) {
+        Intent intent = new Intent(this, TutorialActivity.class);
         startActivity(intent);
     }
 

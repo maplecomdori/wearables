@@ -1,34 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Myo"
-        android:textSize="20dp" />
-
-
-    <TextView
         android:id="@+id/myoMsg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="20dp"
         android:text="Myo Status"
-        android:textSize="40dp" />
+        android:textSize="40sp" />
 
-    <Button
+    <TextView
+        android:id="@+id/experimentIntro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Go to Courses (temporary)"
-        android:id="@+id/bt_tmp"
-        android:layout_weight="1"
-        android:onClick="navigateToCourseListActivity"/>
+        android:layout_below="@id/myoMsg"
+        android:gravity="center"
+        android:text="@string/overview"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/bt_tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/experimentIntro"
+        android:layout_centerHorizontal="true"
+        android:onClick="navigateToTutorialListActivity"
+
+        android:text="Tutorial"
+        android:textSize="40sp" />
+
+    <Button
+        android:id="@+id/bt_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bt_tutorial"
+        android:layout_centerHorizontal="true"
+        android:onClick="navigateToCourseListActivity"
+        android:text="Start"
+        android:textSize="40sp" />
+
+
+</RelativeLayout>
 
 

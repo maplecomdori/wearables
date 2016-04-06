@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.drdc_admin.wearablephone.activities.MainActivity;
-import com.example.drdc_admin.wearablephone.classes.Course;
 import com.example.drdc_admin.wearablephone.classes.Step;
 import com.google.gson.Gson;
 
@@ -21,7 +20,6 @@ public class StepListener implements View.OnClickListener {
     private Context context;
     private int videoRID;
     private String filename;
-    private Course testCourse;
     private OutputStream outputStream;
 
 
@@ -31,12 +29,18 @@ public class StepListener implements View.OnClickListener {
         filename = file;
     }
 
-    /**
-     * Called when a view has been clicked
-     * pass which course the user wants to StepListActivity
-     *
-     * @param v The view that was clicked.
-     */
+    public StepListener(Context ctx, String file) {
+        context = ctx;
+        filename = file;
+    }
+
+
+        /**
+         * Called when a view has been clicked
+         * pass which course the user wants to StepListActivity
+         *
+         * @param v The view that was clicked.
+         */
     @Override
     public void onClick(View v) {
 //        Intent intent = new Intent(context, ContentActivity.class);
@@ -48,18 +52,13 @@ public class StepListener implements View.OnClickListener {
 //        sendMsgToMoverio("test".getBytes());
         outputStream = MainActivity.outputStream;
 
-
-        //TODO change to what the user has selected
-        testCourse = new Course();
-        testCourse.setDescription("testDescription");
-
         Step step = new Step("TITLE", "DESCRIPTION");
-        step.setVideoFileName("airplanestep01");
+        step.setFileName(filename);
         step.setInstruction("INSTRUCTION");
 
         Gson gson = new Gson();
         String jsonString = gson.toJson(step);
-        Log.i(TAG, "jsonString = " + jsonString);
+        Log.i(TAG, "jsonString sent = " + jsonString);
         sendMsgToMoverio(jsonString.getBytes());
     }
 
@@ -69,7 +68,7 @@ public class StepListener implements View.OnClickListener {
         if (outputStream != null) {
             try {
                 outputStream.write(buffer);
-                outputStream.flush();
+//                outputStream.flush();
 //                 outputStream.close();
 //                btMsg = "";
 
@@ -78,7 +77,7 @@ public class StepListener implements View.OnClickListener {
                 e.printStackTrace();
             }
         } else {
-//            Log.e(TAG, "outputStream is NULL");
+            Log.e(TAG, "outputStream is NULL");
         }
     }
 }

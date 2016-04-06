@@ -9,11 +9,13 @@ public class Step {
     private String title;
     private String description;
     private int imgRID;     // imagefile R.id.####
-    private String videoFileName;
+    private String fileName;// without extension
     private String instruction;
+    private String phase; // phase that contains this step
 
-    private int videoRID;  // video file for the lesson R.id.####
+    public Step() {
 
+    }
 
     public Step(String title, String desc) {
         this.title = title;
@@ -27,6 +29,15 @@ public class Step {
     public void setNumber(int number) {
         this.number = number;
     }
+
+    public String getPhase() {
+        return phase;
+    }
+
+    public void setPhase(String phase) {
+        this.phase = phase;
+    }
+
 
     public String getTitle() {
         return title;
@@ -52,20 +63,12 @@ public class Step {
         this.imgRID = imgRID;
     }
 
-    public String getVideoFileName() {
-        return videoFileName;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setVideoFileName(String videoFileName) {
-        this.videoFileName = videoFileName;
-    }
-
-    public int getVideoRID() {
-        return videoRID;
-    }
-
-    public void setVideoRID(int videoRID) {
-        this.videoRID = videoRID;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public String getInstruction() {

@@ -156,7 +156,7 @@ public class DeviceListActivity extends Activity {
     };
 
     /**
-     * The BroadcastReceiver that listens for discovered devices and changes the title when
+     * The BroadcastReceiver that listens for discovered devices and changes the courseTitle when
      * discovery is finished
      */
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -173,7 +173,7 @@ public class DeviceListActivity extends Activity {
                 if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
                     mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
                 }
-                // When discovery is finished, change the Activity title
+                // When discovery is finished, change the Activity courseTitle
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 setProgressBarIndeterminateVisibility(false);
                 setTitle(R.string.select_device);
@@ -202,11 +202,11 @@ public class DeviceListActivity extends Activity {
     private void doDiscovery() {
         Log.d(TAG, "doDiscovery()");
 
-        // Indicate scanning in the title
+        // Indicate scanning in the courseTitle
         setProgressBarIndeterminateVisibility(true);
         setTitle(R.string.scanning);
 
-        // Turn on sub-title for new devices
+        // Turn on sub-courseTitle for new devices
         findViewById(R.id.title_new_devices).setVisibility(View.VISIBLE);
 
         // If we're already discovering, stop it
